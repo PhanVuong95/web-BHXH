@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import HeaderBase from "./headerBase";
 
-const ProductDetailPage1: React.FunctionComponent = (props) => {
+const ProductDetailPage1: React.FunctionComponent = () => {
   const [imageSrcs, setImageSrcs] = useState<string[]>([]);
   const navigate = useNavigate();
   const insurance = useRef();
@@ -22,7 +22,9 @@ const ProductDetailPage1: React.FunctionComponent = (props) => {
         "https://baohiem.dion.vn/insurance/api/list-paging-viewmodel?pageIndex=1&PageSizes=100&insuranceTypeId=1002"
       )
       .then((response) => {
-        const data = response.data.data.filter((item) => item.id == 1002)[0];
+        const data = response.data.data.filter(
+          (item: any) => item.id == 1002
+        )[0];
 
         insurance.current = data;
       })

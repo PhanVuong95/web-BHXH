@@ -1,7 +1,7 @@
 import { DatePicker, Input, Select } from "antd";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import iconClose from "../assets-src/close_1.png";
-import { convertListToSelect, formatDate2 } from "../utils/validateString";
+import { convertListToSelect, formatDate2 } from "../Utils/validateString";
 import "../locale/vi";
 import locale from "antd/es/date-picker/locale/vi_VN";
 import dayjs from "dayjs";
@@ -24,7 +24,7 @@ const CardMembersHouseHoldBHXH = (props: Props) => {
     props;
   const dateFormat = "DD/MM/YYYY";
 
-  const memberProvinces = useRef([]);
+  // const memberProvinces = useRef([]);
   const memberDistricts = useRef([]);
   const memberWards = useRef([]);
 

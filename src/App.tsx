@@ -2,7 +2,7 @@ import { ToastContainer } from "react-toastify";
 import { Route, Routes } from "react-router-dom";
 import LayoutPage from "./Layout/layoutPage";
 import HomePage from "./Page/homePage";
-import { SpecificProvider } from "./components/specific_context";
+import { SpecificProvider } from "./Components/specificContext";
 import ListSocialInsurance from "./Page/list_social_insurance";
 import ListHealthInsurance from "./Page/BHYT/list_health_insurance";
 import ProductDetailPage from "./Components/product_detail";
@@ -20,7 +20,6 @@ import HistoryUnpaidPage from "./Components/history_unpaid";
 import ContractPage from "./Page/contract_page";
 import HistoryPage from "./Page/history_page";
 import UserPage from "./Page/user";
-import LoginPage from "./Page/LoginPage";
 
 function App() {
   return (
@@ -62,7 +61,6 @@ function App() {
             </SpecificProvider>
           }
         />
-        <Route path="/login" element={<LoginPage />} />
         <Route path="/health-insurance" element={<ListHealthInsurance />} />
         <Route
           path="/product-detail/:id"
@@ -81,7 +79,10 @@ function App() {
             </SpecificProvider>
           }
         />
-        <Route path="/bill-pay-bhyt/:id" element={<BillPayBHYTPage />} />
+        <Route
+          path="/bill-pay-bhyt/:id"
+          element={<BillPayBHYTPage w={""} h={""} url={""} />}
+        />
         <Route
           path="/buill-detail/:id"
           element={

@@ -1,8 +1,8 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { registerInfoBHYT } from "../Page/BHYT/list_health_insurance";
 import { Input, Select } from "antd";
-import { convertListToSelect } from "../utils/validateString";
+import { convertListToSelect } from "../Utils/validateString";
 
 interface Props {
   data: any;
@@ -72,7 +72,7 @@ const UserBuyerPage = (props: Props) => {
     }
   }, [selectedDistrict]);
 
-  const handleProvinceChange = (value) => {
+  const handleProvinceChange = (value: any) => {
     const id = parseInt(value, 10);
     setSelectedProvince(id);
     setSelectedDistrict(0);
@@ -80,14 +80,14 @@ const UserBuyerPage = (props: Props) => {
     registerInfoBHYT["provinceId"] = id;
   };
 
-  const handleDistrictChange = (value) => {
+  const handleDistrictChange = (value: any) => {
     const id = parseInt(value, 10);
     setSelectedDistrict(id);
     setSelectedWard(0);
     registerInfoBHYT["districtId"] = id;
   };
 
-  const handlEwardChange = (value) => {
+  const handlEwardChange = (value: any) => {
     const id = parseInt(value, 10);
     setSelectedWard(id);
     registerInfoBHYT["wardId"] = id;

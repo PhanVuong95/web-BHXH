@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import { useState, ReactNode, ReactElement } from "react";
 
-export function Tabs({ children }) {
-  function findActiveTab(a) {
-    return a.reduce((accumulator, currentValue, i) => {
+interface TabsProps {
+  children: ReactElement[]; // Array of React elements (assuming all are Tab components)
+}
+
+export function Tabs({ children }: TabsProps) {
+  function findActiveTab(a: any) {
+    return a.reduce((accumulator: any, currentValue: any, i: any) => {
       if (currentValue.props.active) {
         return i;
       }
@@ -11,7 +15,7 @@ export function Tabs({ children }) {
     }, 0);
   }
 
-  function tabValidator(tab) {
+  function tabValidator(tab: any) {
     return tab.type.displayName === "Tab" ? true : false;
   }
 
@@ -19,7 +23,7 @@ export function Tabs({ children }) {
   return (
     <>
       <div className="flex gap-2 justify-center bg-pink-500 p-2">
-        {children.map((item, i) => {
+        {children.map((item: any, i: any) => {
           return (
             <>
               {tabValidator(item) && (
@@ -37,7 +41,7 @@ export function Tabs({ children }) {
         })}
       </div>
       <div className="p-5">
-        {children.map((item, i) => {
+        {children.map((item: any, i: any) => {
           return (
             <div className={` ${i === activeTab ? "visible" : "hidden"}`}>
               {item.props.component}
@@ -49,7 +53,21 @@ export function Tabs({ children }) {
   );
 }
 
-export function Tab({ children, activeTab, currentTab, setActiveTab }) {
+interface TabProps {
+  children: ReactNode; // Fix: Add ReactNode import
+  activeTab: string;
+  currentTab: string;
+  setActiveTab: (tab: string) => void;
+}
+
+// ... rest of the code
+
+export function Tab({
+  children,
+  activeTab,
+  currentTab,
+  setActiveTab,
+}: TabProps) {
   return (
     <>
       <div

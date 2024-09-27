@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import { PulseLoader } from "react-spinners";
-import { formatMoneyVND } from "../../utils/validateString";
+import { formatMoneyVND } from "../../Utils/validateString";
 import logo from "../../assets-src/logo1.png";
 import HeaderBase from "../../Components/headerBase";
 
@@ -32,7 +32,7 @@ const ListHistoryBHYT = ({}) => {
       )
       .then((response) => {
         let fillteredOrders: any = [];
-        response.data.data.forEach((item) => {
+        response.data.data.forEach((item: any) => {
           if (item.insuranceOrderStatusId == DONE && openTab == 2) {
             fillteredOrders.push(item);
           } else if (
@@ -53,7 +53,7 @@ const ListHistoryBHYT = ({}) => {
       });
   }, [openTab]);
 
-  function formatDateTime(dateTimeString) {
+  function formatDateTime(dateTimeString: any) {
     const date = new Date(dateTimeString);
 
     const hours = String(date.getHours()).padStart(2, "0");
@@ -91,7 +91,7 @@ const ListHistoryBHYT = ({}) => {
     );
   }
 
-  const switchColor = (insuranceOrderStatusId) => {
+  const switchColor = (insuranceOrderStatusId: any) => {
     switch (insuranceOrderStatusId) {
       case PENDING:
         return "#FAAD14";
@@ -146,7 +146,7 @@ const ListHistoryBHYT = ({}) => {
               </div>
             ) : null}
 
-            {listOrder?.map((item, index) => {
+            {listOrder?.map((item: any, index: any) => {
               return (
                 <Link to={"/info-detail-bhyt/" + item.id} key={index}>
                   <div className="p-4 bg-white w-full rounded-xl flex flex-col gap-4">

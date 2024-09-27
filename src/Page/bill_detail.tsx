@@ -1,38 +1,29 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { SpecificContext } from "../Components/specific_context";
-import html2canvas from "html2canvas";
-import { toast } from "react-toastify";
-import { FadeLoader, PulseLoader } from "react-spinners";
+import { SpecificContext } from "../Components/specificContext";
+import { PulseLoader } from "react-spinners";
 import warningIc from "../assets-src/warning_icon.png";
 import HeaderBase from "../Components/headerBase";
 
-const BuillDetailPage: React.FunctionComponent = (props) => {
+const BuillDetailPage: React.FunctionComponent = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const specificContext = useContext<any>(SpecificContext);
-  const { insuranceOrder, setInsuranceOrder } = specificContext;
+  const { insuranceOrder } = specificContext;
   const [base64QRCode, setBase64QRCode] = useState<string>("");
-  const [provinceName, setProvinceName] = useState("");
-  const [districtName, setDistrictName] = useState("");
-  const [wardeName, setWardeName] = useState("");
   const [expiryDateString, setExpiryDateString] = useState("");
   const orderRef = useRef<HTMLDivElement>(null);
 
   const [orderDetail, setOrderDetail] = useState<any>();
-  const [insuredPerson, setInsuredPerson] = useState<any>();
+  const [setInsuredPerson] = useState<any>();
 
   const STATUS_DONE_ID = 1002;
   const [isPaymentSuccessful, setIsPaymentSuccessful] = useState(false);
 
   const handleDownload = () => {
     setLoading(true);
-  };
-
-  const handleBack = () => {
-    navigate(-1);
   };
 
   useEffect(() => {
@@ -75,7 +66,7 @@ const BuillDetailPage: React.FunctionComponent = (props) => {
   useEffect(() => {
     GetQrCode();
   }, []);
-  const formatDate = (date) => {
+  const formatDate = (date: any) => {
     // Lấy giờ, phút, ngày, tháng, năm từ đối tượng Date
     const hours = String(date.getHours()).padStart(2, "0");
     const minutes = String(date.getMinutes()).padStart(2, "0");
@@ -97,15 +88,10 @@ const BuillDetailPage: React.FunctionComponent = (props) => {
             setIsPaymentSuccessful(true); // Hiển thị modal
             clearInterval(interval);
           } else if (base64QRCode == "400") {
-            // const notify1 = () => toast("Có lỗi xảy ra! Xin vui lòng thử lại");
-            // notify1();
             clearInterval(interval);
           }
         })
-        .catch((error) => {
-          // const notify1 = () => toast("Có lỗi xảy ra! Xin vui lòng thử lại");
-          // notify1();
-        });
+        .catch(() => {});
     }, 5000);
 
     // Set timeout to clear the interval after 30 minutes
@@ -319,26 +305,31 @@ const BuillDetailPage: React.FunctionComponent = (props) => {
           )}
         </div>
       </div>
-      <div className="page-2 bg-white">
-        <div className="flex flex-col gap-3">
-          <div className="flex flex-row content-center justify-center items-center">
-            <button
-              onClick={handleDownload}
-              className="px-[24px] py-3 bg-[#DEE7FE] w-full rounded-full bg-[#0076B7] text-base font-normal text-[#0076B7] text-center"
-            >
-              Tải xuống hóa đơn
-            </button>
-          </div>
-          <div className="flex flex-row content-center justify-center items-center">
-            <Link
-              to="/"
-              className="px-[24px] py-3 bg-[#0076B7] w-full rounded-full bg-[#0076B7] text-base font-normal text-white text-center"
-            >
-              Trở về trang chủ
-            </Link>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <div className="page-2 bg-white">
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-row content-center justify-center items-center">
+              <button
+                onClick={handleDownload}
+                className="px-[24px] py-3 bg-[#DEE7FE] w-full rounded-full bg-[#0076B7] text-base font-normal text-[#0076B7] text-center"
+              >
+                Tải xuống hóa đơn
+              </button>
+            </div>
+            <div className="flex flex-row content-center justify-center items-center">
+              <Link
+                to="/"
+                className="px-[24px] py-3 bg-[#0076B7] w-full rounded-full bg-[#0076B7] text-base font-normal text-white text-center"
+              >
+                Trở về trang chủ
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
+      )}
+
       {/* <Modal
         visible={loading}
         modalStyle={{

@@ -10,14 +10,14 @@ import HeaderPage from "../Components/headerPage";
 
 const HomePage: React.FunctionComponent = () => {
   const profieContext = useContext<any>(ProfileContext);
-  const { userProfile, setUserProfile } = profieContext;
+  const { userProfile } = profieContext;
 
   return (
     <div className="home-page min-h-[100vh] pb-[120px] pt-[75px]">
       <div className="banner-top h-full">
         <img src={banner} />
         <div className="flex justify-between items-center user-home">
-          {<UserCard user={userProfile?.userInfo} />}
+          {userProfile?.userInfo && <UserCard user={userProfile.userInfo} />}
         </div>
       </div>
       <div className="bg-white flex flex-wrap justify-between items-center category-home gap-y-[24px] px-4 pt-[82px] pb-[20px]">

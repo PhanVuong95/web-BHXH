@@ -1,6 +1,6 @@
 import { Input, Select } from "antd";
 import { useRef, useState } from "react";
-import { convertListToSelect } from "../utils/validateString";
+import { convertListToSelect } from "../Utils/validateString";
 import "../locale/vi";
 import { registerInfoBHYT } from "../Page/BHYT/list_health_insurance";
 import { useEffect } from "react";

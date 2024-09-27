@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Widthheight } from "../Models";
-import { SpecificContext } from "./specific_context";
+import { SpecificContext } from "./specificContext";
 import { Link } from "react-router-dom";
 import HeaderBase from "./headerBase";
 
-const BillPayPage: React.FC<Widthheight> = ({ url }) => {
+const BillPayPage: React.FC<Widthheight> = () => {
   const specificContext = useContext<any>(SpecificContext);
   const { insuranceOrder, setInsuranceOrder } = specificContext;
   const [provinceName, setProvinceName] = useState("");
@@ -15,7 +15,7 @@ const BillPayPage: React.FC<Widthheight> = ({ url }) => {
 
   console.log(insuranceOrder);
 
-  const handleCheckboxChange = (value) => {
+  const handleCheckboxChange = (value: any) => {
     setSelectedCheckbox(value);
   };
 

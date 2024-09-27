@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FadeLoader } from "react-spinners";
 import Modal from "react-modal";
-import { SpecificContext } from "./specific_context";
+import { SpecificContext } from "./specificContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import imageQR from "../assets-src/icon_qr.png";
@@ -15,25 +15,23 @@ import {
   isValidEmail,
   isValidEmptyString,
   isValidPhone,
-} from "../utils/validateString";
+} from "../Utils/validateString";
 import { IDetectedBarcode, Scanner } from "@yudiel/react-qr-scanner";
 import { Input, Select, DatePicker, Checkbox } from "antd";
 import dayjs from "dayjs";
 import "../locale/vi";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import locale from "antd/es/date-picker/locale/vi_VN";
-import iconClose from "../assets-src/close_1.png";
 import { motion } from "framer-motion";
 import Lottie from "lottie-react";
 import lottieScanQR from "../assets-src/lottie_scan_qr.json";
-import { BenefitLevevlList } from "../Utils/constants";
 import CardMembersHouseHoldBHXH from "./card_members_house_hold_bhxh";
 import HeaderBase from "./headerBase";
 
 dayjs.locale("vi");
 dayjs.extend(customParseFormat);
 
-const RegisterBHXH = (props: any) => {
+const RegisterBHXH = () => {
   const navigate = useNavigate();
   const [personName, setPersonName] = useState<string>("");
   const [citizenId, setCitizenId] = useState<string>("");
@@ -115,17 +113,16 @@ const RegisterBHXH = (props: any) => {
   const [vungLuongToiThieuId, setVungLuongToiThieuId] = useState(0);
   const [benefitLevel, setBenefitLevel] = useState("");
   const infoInsuranceProvinces = useRef([]);
-  const infoInsuranceDistricts = useRef([]);
   const infoInsuranceHospital = useRef([]);
 
   const [
     selectedMedicalByProvinceParticipant,
     setSelectedMedicalByProvinceParticipant,
   ] = useState(0);
-  const [
-    selectedMeicalByDistrictParticipant,
-    setSelectedMeicalByDistrictParticipant,
-  ] = useState(0);
+  // const [
+  //   selectedMeicalByDistrictParticipant,
+  //   setSelectedMeicalByDistrictParticipant,
+  // ] = useState(0);
   const [
     selectedMedicalByHospitalParticipant,
     setSelectedMedicalByHospitalParticipant,
@@ -163,16 +160,16 @@ const RegisterBHXH = (props: any) => {
     setAddressDetailHKHouseHoldParticipant,
   ] = useState<string>("");
 
-  const [windowSize, setWindowSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  });
+  // const [windowSize, setWindowSize] = useState({
+  //   width: window.innerWidth,
+  //   height: window.innerHeight,
+  // });
 
   const [size, setSize] = useState({ width: 200, height: 200 });
   const [opacityQR, setOpacityQR] = useState(1);
   const lottieRef = useRef(null);
 
-  const [isShowModalbenefitLevel, setIsShowModalbenefitLevel] = useState(false);
+  // const [isShowModalbenefitLevel, setIsShowModalbenefitLevel] = useState(false);
 
   // Ref để scroll
   const participantRefs = {
@@ -732,14 +729,14 @@ const RegisterBHXH = (props: any) => {
       finalPrice.current = Math.ceil(
         (wage.current * 0.22 - budgetPerMonth) * monthCount.current
       );
-      setInsuranceOrder((prevOrder) => ({
+      setInsuranceOrder((prevOrder: any) => ({
         ...prevOrder,
         finalPrice: finalPrice.current,
       }));
       setTemp(!temp);
     } else {
       finalPrice.current = 0;
-      setInsuranceOrder((prevOrder) => ({
+      setInsuranceOrder((prevOrder: any) => ({
         ...prevOrder,
         finalPrice: finalPrice.current,
       }));
@@ -748,7 +745,7 @@ const RegisterBHXH = (props: any) => {
   };
 
   useEffect(() => {
-    setInsuranceOrder((prevOrder) => ({
+    setInsuranceOrder((prevOrder: any) => ({
       ...prevOrder,
       insuranceId: 1001,
     }));
@@ -787,7 +784,7 @@ const RegisterBHXH = (props: any) => {
 
     return `${day}/${month}/${year}`;
   }
-  const handleDobChange = (value) => {
+  const handleDobChange = (value: any) => {
     const dateObject = dayjs(value.toString());
     const dateStr = `${dateObject.date().toString().padStart(2, "0")}/${(
       dateObject.month() + 1
@@ -795,22 +792,24 @@ const RegisterBHXH = (props: any) => {
       .toString()
       .padStart(2, "0")}/${dateObject.year()}`;
     setDateValue(dayjs(dateStr, dateFormat));
-    setInsuranceOrder((prevOrder) => ({
+    setInsuranceOrder((prevOrder: any) => ({
       ...prevOrder,
-      listInsuredPerson: prevOrder.listInsuredPerson.map((person, index) =>
-        index === 0 ? { ...person, doB: dateStr } : person
+      listInsuredPerson: prevOrder.listInsuredPerson.map(
+        (person: any, index: any) =>
+          index === 0 ? { ...person, doB: dateStr } : person
       ),
     }));
   };
 
-  const handleProvinceChange = (value) => {
+  const handleProvinceChange = (value: any) => {
     const provinceId = value;
     selectedInsuranceProvinceId.current = provinceId;
     calculateSupportBudget(provinceId, monthCount.current);
-    setInsuranceOrder((prevOrder) => ({
+    setInsuranceOrder((prevOrder: any) => ({
       ...prevOrder,
-      listInsuredPerson: prevOrder.listInsuredPerson.map((person, index) =>
-        index === 0 ? { ...person, insuranceProvinceId: provinceId } : person
+      listInsuredPerson: prevOrder.listInsuredPerson.map(
+        (person: any, index: any) =>
+          index === 0 ? { ...person, insuranceProvinceId: provinceId } : person
       ),
     }));
     calculateFinalPrice();
@@ -819,38 +818,41 @@ const RegisterBHXH = (props: any) => {
   const calculateSupportBudget = (provinceId: number, months: number) => {
     const budgetPerMonth = provinceId === 1398 ? 66000 : 33000;
     setSupportBudget(budgetPerMonth * months);
-    setInsuranceOrder((prevOrder) => ({
+    setInsuranceOrder((prevOrder: any) => ({
       ...prevOrder,
-      listInsuredPerson: prevOrder.listInsuredPerson.map((person, index) =>
-        index === 0
-          ? { ...person, supportBudget: budgetPerMonth * months }
-          : person
+      listInsuredPerson: prevOrder.listInsuredPerson.map(
+        (person: any, index: any) =>
+          index === 0
+            ? { ...person, supportBudget: budgetPerMonth * months }
+            : person
       ),
     }));
   };
 
-  const updateFrontCitizenPhoto = (img) => {
-    setInsuranceOrder((prevOrder) => ({
+  const updateFrontCitizenPhoto = (img: any) => {
+    setInsuranceOrder((prevOrder: any) => ({
       ...prevOrder,
-      listInsuredPerson: prevOrder.listInsuredPerson.map((person, index) =>
-        index === 0 ? { ...person, photoCitizenFront: img } : person
+      listInsuredPerson: prevOrder.listInsuredPerson.map(
+        (person: any, index: any) =>
+          index === 0 ? { ...person, photoCitizenFront: img } : person
       ),
     }));
-    setInsuranceOrder((prevOrder) => ({
+    setInsuranceOrder((prevOrder: any) => ({
       ...prevOrder,
       photoCitizenFront: img,
     }));
     setIsUploadingPhotoCitizenFont(false);
   };
 
-  const updateBackCitizenPhoto = (img) => {
-    setInsuranceOrder((prevOrder) => ({
+  const updateBackCitizenPhoto = (img: any) => {
+    setInsuranceOrder((prevOrder: any) => ({
       ...prevOrder,
-      listInsuredPerson: prevOrder.listInsuredPerson.map((person, index) =>
-        index === 0 ? { ...person, photoCitizenBack: img } : person
+      listInsuredPerson: prevOrder.listInsuredPerson.map(
+        (person: any, index: any) =>
+          index === 0 ? { ...person, photoCitizenBack: img } : person
       ),
     }));
-    setInsuranceOrder((prevOrder) => ({
+    setInsuranceOrder((prevOrder: any) => ({
       ...prevOrder,
       photoCitizenBack: img,
     }));
@@ -898,7 +900,7 @@ const RegisterBHXH = (props: any) => {
     }
   };
 
-  const scrollToElement = (input) => {
+  const scrollToElement = (input: any) => {
     input.current.focus();
   };
 
@@ -1228,10 +1230,11 @@ const RegisterBHXH = (props: any) => {
   };
 
   // const ()
-  const onSubmit = (data: any) => {
+  const onSubmit = (_data: any) => {
+    // Prefix with underscore
     if (validate()) {
       setLoading(true);
-      if (insuranceOrder.id == 0) {
+      if (insuranceOrder.id === 0) {
         AddInsuranceOrder();
       } else {
         UpdateInsuranceOrder();
@@ -1268,7 +1271,7 @@ const RegisterBHXH = (props: any) => {
         delete result.listInsuredPerson[0].price;
         delete result.listInsuredPerson[0].insuredPersonId;
 
-        result.houseHold.houseHoldPeoples.map((item) => {
+        result.houseHold.houseHoldPeoples.map((item: any) => {
           delete item.createdTime;
           return item;
         });
@@ -1349,10 +1352,10 @@ const RegisterBHXH = (props: any) => {
           placeholder="Nhập tên của bạn"
           onChange={(e) => {
             setPersonName(e.target.value);
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               listInsuredPerson: prevOrder.listInsuredPerson.map(
-                (person, index) =>
+                (person: any, index: any) =>
                   index === 0 ? { ...person, fullName: e.target.value } : person
               ),
             }));
@@ -1410,10 +1413,10 @@ const RegisterBHXH = (props: any) => {
 
             // Cập nhật giá trị của input và trạng thái citizenId
             setCitizenId(filteredValue);
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               listInsuredPerson: prevOrder.listInsuredPerson.map(
-                (person, index) =>
+                (person: any, index: any) =>
                   index === 0 ? { ...person, citizenId: filteredValue } : person
               ),
             }));
@@ -1439,10 +1442,10 @@ const RegisterBHXH = (props: any) => {
           placeholder="Nhập số Bảo hiểm Xã hội"
           onChange={(e) => {
             setSocialInsuranceId(e.target.value);
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               listInsuredPerson: prevOrder.listInsuredPerson.map(
-                (person, index) =>
+                (person: any, index: any) =>
                   index === 0
                     ? { ...person, socialInsuranceNumber: e.target.value }
                     : person
@@ -1491,10 +1494,10 @@ const RegisterBHXH = (props: any) => {
           value={gender}
           onChange={(value) => {
             setGender(value);
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               listInsuredPerson: prevOrder.listInsuredPerson.map(
-                (person, index) =>
+                (person: any, index: any) =>
                   index === 0 ? { ...person, gender: value } : person
               ),
             }));
@@ -1531,10 +1534,10 @@ const RegisterBHXH = (props: any) => {
           onChange={(value) => {
             setEthnic(value);
 
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               listInsuredPerson: prevOrder.listInsuredPerson.map(
-                (person, index) =>
+                (person: any, index: any) =>
                   index === 0 ? { ...person, ethnicId: value } : person
               ),
             }));
@@ -1571,10 +1574,10 @@ const RegisterBHXH = (props: any) => {
               // Cập nhật giá trị wage
               wage.current = numericValue;
               // Cập nhật giá trị trong insuranceOrder
-              setInsuranceOrder((prevOrder) => ({
+              setInsuranceOrder((prevOrder: any) => ({
                 ...prevOrder,
                 listInsuredPerson: prevOrder.listInsuredPerson.map(
-                  (person, index) =>
+                  (person: any, index: any) =>
                     index === 0
                       ? {
                           ...person,
@@ -1619,10 +1622,10 @@ const RegisterBHXH = (props: any) => {
                 selectedInsuranceProvinceId.current,
                 value
               );
-              setInsuranceOrder((prevOrder) => ({
+              setInsuranceOrder((prevOrder: any) => ({
                 ...prevOrder,
                 listInsuredPerson: prevOrder.listInsuredPerson.map(
-                  (person, index) =>
+                  (person: any, index: any) =>
                     index === 0
                       ? {
                           ...person,
@@ -1639,10 +1642,10 @@ const RegisterBHXH = (props: any) => {
               );
             }
 
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               listInsuredPerson: prevOrder.listInsuredPerson.map(
-                (person, index) =>
+                (person: any, index: any) =>
                   index === 0
                     ? {
                         ...person,
@@ -1712,10 +1715,10 @@ const RegisterBHXH = (props: any) => {
             setSelectedKSWard(0);
 
             setSelectedKSProvince(value);
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               listInsuredPerson: prevOrder.listInsuredPerson.map(
-                (person, index) =>
+                (person: any, index: any) =>
                   index === 0
                     ? {
                         ...person,
@@ -1758,10 +1761,10 @@ const RegisterBHXH = (props: any) => {
             setSelectedKSWard(0);
 
             setSelectedKSDistrict(value);
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               listInsuredPerson: prevOrder.listInsuredPerson.map(
-                (person, index) =>
+                (person: any, index: any) =>
                   index === 0
                     ? {
                         ...person,
@@ -1796,10 +1799,10 @@ const RegisterBHXH = (props: any) => {
           value={selectedKSWard}
           onChange={(value: any) => {
             setSelectedKSWard(value);
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               listInsuredPerson: prevOrder.listInsuredPerson.map(
-                (person, index) =>
+                (person: any, index: any) =>
                   index === 0
                     ? {
                         ...person,
@@ -1834,10 +1837,10 @@ const RegisterBHXH = (props: any) => {
           onChange={(e) => {
             setKSAddressDetail(e.target.value);
 
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               listInsuredPerson: prevOrder.listInsuredPerson.map(
-                (person, index) =>
+                (person: any, index: any) =>
                   index === 0
                     ? {
                         ...person,
@@ -1874,10 +1877,10 @@ const RegisterBHXH = (props: any) => {
             setSelectedTTDistrict(0);
             setSelectedTTWard(0);
             setSelectedTTProvince(value);
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               listInsuredPerson: prevOrder.listInsuredPerson.map(
-                (person, index) =>
+                (person: any, index: any) =>
                   index === 0
                     ? {
                         ...person,
@@ -1920,10 +1923,10 @@ const RegisterBHXH = (props: any) => {
             setSelectedTTWard(0);
 
             setSelectedTTDistrict(value);
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               listInsuredPerson: prevOrder.listInsuredPerson.map(
-                (person, index) =>
+                (person: any, index: any) =>
                   index === 0
                     ? {
                         ...person,
@@ -1960,10 +1963,10 @@ const RegisterBHXH = (props: any) => {
           onChange={(value: any) => {
             setSelectedTTWard(value);
 
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               listInsuredPerson: prevOrder.listInsuredPerson.map(
-                (person, index) =>
+                (person: any, index: any) =>
                   index === 0
                     ? {
                         ...person,
@@ -1998,10 +2001,10 @@ const RegisterBHXH = (props: any) => {
           onChange={(e) => {
             setTTAddressDetail(e.target.value);
 
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               listInsuredPerson: prevOrder.listInsuredPerson.map(
-                (person, index) =>
+                (person: any, index: any) =>
                   index === 0
                     ? {
                         ...person,
@@ -2034,10 +2037,10 @@ const RegisterBHXH = (props: any) => {
           onChange={(value: any) => {
             setVungLuongToiThieuId(value);
 
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               listInsuredPerson: prevOrder.listInsuredPerson.map(
-                (person, index) =>
+                (person: any, index: any) =>
                   index === 0
                     ? {
                         ...person,
@@ -2081,10 +2084,10 @@ const RegisterBHXH = (props: any) => {
             if (value != 0) {
               setSelectedMedicalByProvinceParticipant(value);
 
-              setInsuranceOrder((prevOrder) => ({
+              setInsuranceOrder((prevOrder: any) => ({
                 ...prevOrder,
                 listInsuredPerson: prevOrder.listInsuredPerson.map(
-                  (person, index) =>
+                  (person: any, index: any) =>
                     index === 0
                       ? {
                           ...person,
@@ -2111,140 +2114,140 @@ const RegisterBHXH = (props: any) => {
     );
   };
 
-  const inputBenefitLevelParticipants = () => {
-    return (
-      <div>
-        <label className="block text-sm font-normal text-gray-900 pb-2">
-          Mức hưởng <samp className="text-red-600">*</samp>
-        </label>
-        <Select
-          size="large"
-          className="w-[100%]"
-          showSearch
-          ref={participantRefs.benefitLevelParticipant}
-          dropdownMatchSelectWidth={false}
-          dropdownStyle={{ maxWidth: "300px" }}
-          placeholder="Mức hưởng"
-          value={benefitLevel}
-          key={benefitLevel}
-          onChange={(value: any) => {
-            setBenefitLevel(value);
+  // const inputBenefitLevelParticipants = () => {
+  //   return (
+  //     <div>
+  //       <label className="block text-sm font-normal text-gray-900 pb-2">
+  //         Mức hưởng <samp className="text-red-600">*</samp>
+  //       </label>
+  //       <Select
+  //         size="large"
+  //         className="w-[100%]"
+  //         showSearch
+  //         ref={participantRefs.benefitLevelParticipant}
+  //         dropdownMatchSelectWidth={false}
+  //         dropdownStyle={{ maxWidth: "300px" }}
+  //         placeholder="Mức hưởng"
+  //         value={benefitLevel}
+  //         key={benefitLevel}
+  //         onChange={(value: any) => {
+  //           setBenefitLevel(value);
 
-            setInsuranceOrder((prevOrder) => ({
-              ...prevOrder,
-              listInsuredPerson: prevOrder.listInsuredPerson.map(
-                (person, index) =>
-                  index === 0
-                    ? {
-                        ...person,
-                        benefitLevel: value,
-                      }
-                    : person
-              ),
-            }));
-          }}
-          filterOption={(input, option) =>
-            (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-          }
-          options={[
-            { value: "", label: "Chọn mức hưởng" },
-            { value: "1", label: "Mức 1" },
-            { value: "2", label: "Mức 2" },
-            { value: "3", label: "Mức 3" },
-            { value: "4", label: "Mức 4" },
-            { value: "5", label: "Mức 5" },
-          ]}
-        />
+  //           setInsuranceOrder((prevOrder: any) => ({
+  //             ...prevOrder,
+  //             listInsuredPerson: prevOrder.listInsuredPerson.map(
+  //               (person: any, index: any) =>
+  //                 index === 0
+  //                   ? {
+  //                       ...person,
+  //                       benefitLevel: value,
+  //                     }
+  //                   : person
+  //             ),
+  //           }));
+  //         }}
+  //         filterOption={(input, option) =>
+  //           (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+  //         }
+  //         options={[
+  //           { value: "", label: "Chọn mức hưởng" },
+  //           { value: "1", label: "Mức 1" },
+  //           { value: "2", label: "Mức 2" },
+  //           { value: "3", label: "Mức 3" },
+  //           { value: "4", label: "Mức 4" },
+  //           { value: "5", label: "Mức 5" },
+  //         ]}
+  //       />
 
-        <button
-          onClick={() => {
-            setIsShowModalbenefitLevel(!isShowModalbenefitLevel);
-          }}
-          className="text-blue-600 mt-2 underline"
-          type="button"
-        >
-          Chi tiết mức hưởng
-        </button>
+  //       <button
+  //         onClick={() => {
+  //           setIsShowModalbenefitLevel(!isShowModalbenefitLevel);
+  //         }}
+  //         className="text-blue-600 mt-2 underline"
+  //         type="button"
+  //       >
+  //         Chi tiết mức hưởng
+  //       </button>
 
-        <Modal
-          isOpen={isShowModalbenefitLevel}
-          onRequestClose={() => setIsShowModalbenefitLevel(false)}
-          style={{
-            content: {
-              top: "50%",
-              left: "50%",
-              right: "auto",
-              bottom: "auto",
-              marginRight: "-50%",
-              transform: "translate(-50%, -50%)",
-              backgroundColor: "rgba(0, 0, 0, 0.3)",
-              border: "none",
-              padding: 0,
-              width: "90%",
-              height: "75%",
-              overflow: "auto",
-            },
-            overlay: {
-              backgroundColor: "rgba(0, 0, 0, 0.3)",
-            },
-          }}
-        >
-          <div className="p-4 w-[100%] relative bg-white">
-            {BenefitLevevlList.map((item) => (
-              <div>
-                <div className="pb-2 text-blue-600  text-lg font-normal">
-                  - Mức hưởng số {item?.value}
-                </div>
-                <div className="pb-2 text-justify">{item?.label}</div>
-              </div>
-            ))}
-          </div>
-        </Modal>
-      </div>
-    );
-  };
+  //       <Modal
+  //         isOpen={isShowModalbenefitLevel}
+  //         onRequestClose={() => setIsShowModalbenefitLevel(false)}
+  //         style={{
+  //           content: {
+  //             top: "50%",
+  //             left: "50%",
+  //             right: "auto",
+  //             bottom: "auto",
+  //             marginRight: "-50%",
+  //             transform: "translate(-50%, -50%)",
+  //             backgroundColor: "rgba(0, 0, 0, 0.3)",
+  //             border: "none",
+  //             padding: 0,
+  //             width: "90%",
+  //             height: "75%",
+  //             overflow: "auto",
+  //           },
+  //           overlay: {
+  //             backgroundColor: "rgba(0, 0, 0, 0.3)",
+  //           },
+  //         }}
+  //       >
+  //         <div className="p-4 w-[100%] relative bg-white">
+  //           {BenefitLevevlList.map((item: any) => (
+  //             <div>
+  //               <div className="pb-2 text-blue-600  text-lg font-normal">
+  //                 - Mức hưởng số {item?.value}
+  //               </div>
+  //               <div className="pb-2 text-justify">{item?.label}</div>
+  //             </div>
+  //           ))}
+  //         </div>
+  //       </Modal>
+  //     </div>
+  //   );
+  // };
 
-  const inputExaminationByDistrictParticipants = () => {
-    return (
-      <div>
-        <label className="block text-sm font-normal text-gray-900 pb-2">
-          Quận huyện khám chữa bệnh <samp className="text-red-600">*</samp>
-        </label>
-        <Select
-          size="large"
-          className="w-[100%]"
-          showSearch
-          dropdownMatchSelectWidth={false}
-          placeholder="Quận huyện"
-          value={selectedMeicalByDistrictParticipant}
-          key={selectedMeicalByDistrictParticipant}
-          onChange={(value: any) => {
-            setSelectedMeicalByDistrictParticipant(value);
+  // const inputExaminationByDistrictParticipants = () => {
+  //   return (
+  //     <div>
+  //       <label className="block text-sm font-normal text-gray-900 pb-2">
+  //         Quận huyện khám chữa bệnh <samp className="text-red-600">*</samp>
+  //       </label>
+  //       <Select
+  //         size="large"
+  //         className="w-[100%]"
+  //         showSearch
+  //         dropdownMatchSelectWidth={false}
+  //         placeholder="Quận huyện"
+  //         value={selectedMeicalByDistrictParticipant}
+  //         key={selectedMeicalByDistrictParticipant}
+  //         onChange={(value: any) => {
+  //           setSelectedMeicalByDistrictParticipant(value);
 
-            setInsuranceOrder((prevOrder) => ({
-              ...prevOrder,
-              listInsuredPerson: prevOrder.listInsuredPerson.map(
-                (person, index) =>
-                  index === 0
-                    ? {
-                        ...person,
-                        medicalDistrictId: value,
-                      }
-                    : person
-              ),
-            }));
-          }}
-          filterOption={(input, option) =>
-            (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-          }
-          options={convertListToSelect(
-            infoInsuranceDistricts.current,
-            "Quận huyện"
-          )}
-        />
-      </div>
-    );
-  };
+  //           setInsuranceOrder((prevOrder: any) => ({
+  //             ...prevOrder,
+  //             listInsuredPerson: prevOrder.listInsuredPerson.map(
+  //               (person: any, index: any) =>
+  //                 index === 0
+  //                   ? {
+  //                       ...person,
+  //                       medicalDistrictId: value,
+  //                     }
+  //                   : person
+  //             ),
+  //           }));
+  //         }}
+  //         filterOption={(input, option) =>
+  //           (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+  //         }
+  //         options={convertListToSelect(
+  //           infoInsuranceDistricts.current,
+  //           "Quận huyện"
+  //         )}
+  //       />
+  //     </div>
+  //   );
+  // };
 
   const inputHospitalExaminationParticipants = () => {
     return (
@@ -2265,10 +2268,10 @@ const RegisterBHXH = (props: any) => {
           onChange={(value: any) => {
             setSelectedMedicalByHospitalParticipant(value);
 
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               listInsuredPerson: prevOrder.listInsuredPerson.map(
-                (person, index) =>
+                (person: any, index: any) =>
                   index === 0
                     ? {
                         ...person,
@@ -2324,7 +2327,7 @@ const RegisterBHXH = (props: any) => {
           onChange={(e) => {
             setFullNamHouseHoldParticipant(e.target.value);
 
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               houseHold: {
                 ...prevOrder.houseHold,
@@ -2354,7 +2357,7 @@ const RegisterBHXH = (props: any) => {
           onChange={(e) => {
             setCCCDHouseHoldParticipant(e.target.value);
 
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               houseHold: {
                 ...prevOrder.houseHold,
@@ -2391,7 +2394,7 @@ const RegisterBHXH = (props: any) => {
             setSelectedHouseholdDistrict(0);
             setSelectedHouseholdWard(0);
 
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               houseHold: {
                 ...prevOrder.houseHold,
@@ -2429,7 +2432,7 @@ const RegisterBHXH = (props: any) => {
             householdWards.current = [];
             setSelectedHouseholdWard(0);
 
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               houseHold: {
                 ...prevOrder.houseHold,
@@ -2467,7 +2470,7 @@ const RegisterBHXH = (props: any) => {
           onChange={(value: any) => {
             setSelectedHouseholdWard(value);
 
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               houseHold: {
                 ...prevOrder.houseHold,
@@ -2508,7 +2511,7 @@ const RegisterBHXH = (props: any) => {
             setSelectedTTHouseholdDistrict(0);
             setSelectedTTHouseholdWard(0);
 
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               houseHold: {
                 ...prevOrder.houseHold,
@@ -2549,7 +2552,7 @@ const RegisterBHXH = (props: any) => {
             householdTTWards.current = [];
             setSelectedTTHouseholdWard(0);
 
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               houseHold: {
                 ...prevOrder.houseHold,
@@ -2587,7 +2590,7 @@ const RegisterBHXH = (props: any) => {
           onChange={(value: any) => {
             setSelectedTTHouseholdWard(value);
 
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               houseHold: {
                 ...prevOrder.houseHold,
@@ -2620,7 +2623,7 @@ const RegisterBHXH = (props: any) => {
           onChange={(e) => {
             setAddressDetailHouseHoldParticipant(e.target.value);
 
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               houseHold: {
                 ...prevOrder.houseHold,
@@ -2649,7 +2652,7 @@ const RegisterBHXH = (props: any) => {
           onChange={(e) => {
             setAddressDetailHKHouseHoldParticipant(e.target.value);
 
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               houseHold: {
                 ...prevOrder.houseHold,
@@ -2662,246 +2665,246 @@ const RegisterBHXH = (props: any) => {
     );
   };
 
-  const inputCCCDMember = (index) => {
-    return (
-      <div>
-        <label className="block text-sm font-normal text-gray-900 pb-2">
-          Số CCCD <samp className="text-red-600">*</samp>
-        </label>
-        <Input
-          type="text"
-          maxLength={12}
-          ref={members[index].citizenId}
-          defaultValue={
-            insuranceOrder.houseHold.houseHoldPeoples[index].citizenId
-          }
-          className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="Nhập CCCD"
-          onChange={(e) => {
-            insuranceOrder.houseHold.houseHoldPeoples[index].citizenId =
-              e.target.value;
-          }}
-        />
-      </div>
-    );
-  };
+  // const inputCCCDMember = (index: any) => {
+  //   return (
+  //     <div>
+  //       <label className="block text-sm font-normal text-gray-900 pb-2">
+  //         Số CCCD <samp className="text-red-600">*</samp>
+  //       </label>
+  //       <Input
+  //         type="text"
+  //         maxLength={12}
+  //         ref={members[index].citizenId}
+  //         defaultValue={
+  //           insuranceOrder.houseHold.houseHoldPeoples[index].citizenId
+  //         }
+  //         className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+  //         placeholder="Nhập CCCD"
+  //         onChange={(e) => {
+  //           insuranceOrder.houseHold.houseHoldPeoples[index].citizenId =
+  //             e.target.value;
+  //         }}
+  //       />
+  //     </div>
+  //   );
+  // };
 
-  const inputGenderMemder = (index) => {
-    return (
-      <div>
-        <label className="block text-sm font-normal text-gray-900 pb-2">
-          Giới tính <samp className="text-red-600">*</samp>
-        </label>
-        <Select
-          size="large"
-          className="w-[100%]"
-          placeholder="Chọn giới tính"
-          ref={members[index].gender}
-          defaultValue={insuranceOrder.houseHold.houseHoldPeoples[index].gender}
-          dropdownMatchSelectWidth={false}
-          onChange={(value) => {
-            insuranceOrder.houseHold.houseHoldPeoples[index].gender = value;
-          }}
-          key={gender}
-          filterOption={(input, option) =>
-            (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-          }
-          options={[
-            { value: "", label: "Chọn giới tính" },
-            { value: "Nam", label: "Nam" },
-            { value: "Nữ", label: "Nữ" },
-          ]}
-        />
-      </div>
-    );
-  };
+  // const inputGenderMemder = (index: any) => {
+  //   return (
+  //     <div>
+  //       <label className="block text-sm font-normal text-gray-900 pb-2">
+  //         Giới tính <samp className="text-red-600">*</samp>
+  //       </label>
+  //       <Select
+  //         size="large"
+  //         className="w-[100%]"
+  //         placeholder="Chọn giới tính"
+  //         ref={members[index].gender}
+  //         defaultValue={insuranceOrder.houseHold.houseHoldPeoples[index].gender}
+  //         dropdownMatchSelectWidth={false}
+  //         onChange={(value) => {
+  //           insuranceOrder.houseHold.houseHoldPeoples[index].gender = value;
+  //         }}
+  //         key={gender}
+  //         filterOption={(input, option) =>
+  //           (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+  //         }
+  //         options={[
+  //           { value: "", label: "Chọn giới tính" },
+  //           { value: "Nam", label: "Nam" },
+  //           { value: "Nữ", label: "Nữ" },
+  //         ]}
+  //       />
+  //     </div>
+  //   );
+  // };
 
-  const inputFullNameMember = (index) => {
-    return (
-      <div>
-        <label className="block text-sm font-normal text-gray-900 pb-2">
-          Họ và tên <samp className="text-red-600">*</samp>
-        </label>
-        <Input
-          type="text"
-          ref={members[index].name}
-          defaultValue={insuranceOrder.houseHold.houseHoldPeoples[index].name}
-          className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="Họ và tên"
-          onChange={(e) => {
-            insuranceOrder.houseHold.houseHoldPeoples[index].name =
-              e.target.value;
-          }}
-        />
-      </div>
-    );
-  };
+  // const inputFullNameMember = (index: any) => {
+  //   return (
+  //     <div>
+  //       <label className="block text-sm font-normal text-gray-900 pb-2">
+  //         Họ và tên <samp className="text-red-600">*</samp>
+  //       </label>
+  //       <Input
+  //         type="text"
+  //         ref={members[index].name}
+  //         defaultValue={insuranceOrder.houseHold.houseHoldPeoples[index].name}
+  //         className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+  //         placeholder="Họ và tên"
+  //         onChange={(e) => {
+  //           insuranceOrder.houseHold.houseHoldPeoples[index].name =
+  //             e.target.value;
+  //         }}
+  //       />
+  //     </div>
+  //   );
+  // };
 
-  const inputRelationshipMember = (index) => {
-    return (
-      <div>
-        <label className="block text-sm font-normal text-gray-900 pb-2">
-          Mối quan hệ <samp className="text-red-600">*</samp>
-        </label>
-        <Select
-          size="large"
-          className="w-[100%]"
-          showSearch
-          ref={members[index].relationShipId}
-          placeholder="Chọn mối quan hệ"
-          dropdownMatchSelectWidth={false}
-          defaultValue={
-            insuranceOrder.houseHold.houseHoldPeoples[index].relationShipId
-          }
-          onChange={(value) => {
-            insuranceOrder.houseHold.houseHoldPeoples[index].relationShipId =
-              value;
-          }}
-          key={gender}
-          filterOption={(input, option) =>
-            (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-          }
-          options={[
-            { value: "", label: "Chọn mối quan hệ" },
-            { value: "00", label: "Chủ hộ" },
-            { value: "01", label: "Vợ" },
-            { value: "02", label: "Chồng" },
-            { value: "03", label: "Bố" },
-            { value: "04", label: "Mẹ" },
-            { value: "05", label: "Em" },
-            { value: "06", label: "Anh" },
-            { value: "07", label: "Chị" },
-            { value: "08", label: "Con" },
-            { value: "09", label: "Cháu" },
-            { value: "10", label: "Ông" },
-            { value: "11", label: "Bà" },
-            { value: "12", label: "Cô" },
-            { value: "13", label: "Dì" },
-            { value: "14", label: "Chú" },
-            { value: "15", label: "Thím" },
-            { value: "16", label: "Bác" },
-            { value: "17", label: "Cậu" },
-            { value: "18", label: "Mợ" },
-            { value: "19", label: "Con dâu" },
-            { value: "20", label: "Con rể" },
-            { value: "21", label: "Chắt" },
-            { value: "99", label: "Khác" },
-          ]}
-        />
-      </div>
-    );
-  };
+  // const inputRelationshipMember = (index: any) => {
+  //   return (
+  //     <div>
+  //       <label className="block text-sm font-normal text-gray-900 pb-2">
+  //         Mối quan hệ <samp className="text-red-600">*</samp>
+  //       </label>
+  //       <Select
+  //         size="large"
+  //         className="w-[100%]"
+  //         showSearch
+  //         ref={members[index].relationShipId}
+  //         placeholder="Chọn mối quan hệ"
+  //         dropdownMatchSelectWidth={false}
+  //         defaultValue={
+  //           insuranceOrder.houseHold.houseHoldPeoples[index].relationShipId
+  //         }
+  //         onChange={(value) => {
+  //           insuranceOrder.houseHold.houseHoldPeoples[index].relationShipId =
+  //             value;
+  //         }}
+  //         key={gender}
+  //         filterOption={(input, option) =>
+  //           (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+  //         }
+  //         options={[
+  //           { value: "", label: "Chọn mối quan hệ" },
+  //           { value: "00", label: "Chủ hộ" },
+  //           { value: "01", label: "Vợ" },
+  //           { value: "02", label: "Chồng" },
+  //           { value: "03", label: "Bố" },
+  //           { value: "04", label: "Mẹ" },
+  //           { value: "05", label: "Em" },
+  //           { value: "06", label: "Anh" },
+  //           { value: "07", label: "Chị" },
+  //           { value: "08", label: "Con" },
+  //           { value: "09", label: "Cháu" },
+  //           { value: "10", label: "Ông" },
+  //           { value: "11", label: "Bà" },
+  //           { value: "12", label: "Cô" },
+  //           { value: "13", label: "Dì" },
+  //           { value: "14", label: "Chú" },
+  //           { value: "15", label: "Thím" },
+  //           { value: "16", label: "Bác" },
+  //           { value: "17", label: "Cậu" },
+  //           { value: "18", label: "Mợ" },
+  //           { value: "19", label: "Con dâu" },
+  //           { value: "20", label: "Con rể" },
+  //           { value: "21", label: "Chắt" },
+  //           { value: "99", label: "Khác" },
+  //         ]}
+  //       />
+  //     </div>
+  //   );
+  // };
 
-  const inputDobMember = (index) => {
-    return (
-      <div>
-        <label className="block text-sm font-normal text-gray-900 pb-2">
-          Ngày sinh <samp className="text-red-600">*</samp>
-        </label>
-        <DatePicker
-          type="date"
-          size="large"
-          locale={locale}
-          className="w-[100%]"
-          ref={members[index].doB}
-          placeholder="dd/mm/yyyy"
-          defaultValue={
-            insuranceOrder.houseHold.houseHoldPeoples[index].doB == ""
-              ? ""
-              : dayjs(
-                  insuranceOrder.houseHold.houseHoldPeoples[index].doB,
-                  dateFormat
-                )
-          }
-          onChange={(value) => {
-            const dateObject = dayjs(value.toString());
-            const dateStr = `${dateObject
-              .date()
-              .toString()
-              .padStart(2, "0")}/${(dateObject.month() + 1)
-              .toString()
-              .padStart(2, "0")}/${dateObject.year()}`;
+  // const inputDobMember = (index: any) => {
+  //   return (
+  //     <div>
+  //       <label className="block text-sm font-normal text-gray-900 pb-2">
+  //         Ngày sinh <samp className="text-red-600">*</samp>
+  //       </label>
+  //       <DatePicker
+  //         type="date"
+  //         size="large"
+  //         locale={locale}
+  //         className="w-[100%]"
+  //         ref={members[index].doB}
+  //         placeholder="dd/mm/yyyy"
+  //         defaultValue={
+  //           insuranceOrder.houseHold.houseHoldPeoples[index].doB == ""
+  //             ? ""
+  //             : dayjs(
+  //                 insuranceOrder.houseHold.houseHoldPeoples[index].doB,
+  //                 dateFormat
+  //               )
+  //         }
+  //         onChange={(value) => {
+  //           const dateObject = dayjs(value.toString());
+  //           const dateStr = `${dateObject
+  //             .date()
+  //             .toString()
+  //             .padStart(2, "0")}/${(dateObject.month() + 1)
+  //             .toString()
+  //             .padStart(2, "0")}/${dateObject.year()}`;
 
-            insuranceOrder.houseHold.houseHoldPeoples[index].doB = dateStr;
-          }}
-          format={dateFormat}
-          maxDate={dayjs(formatDate2(new Date()), dateFormat)}
-        />
-      </div>
-    );
-  };
+  //           insuranceOrder.houseHold.houseHoldPeoples[index].doB = dateStr;
+  //         }}
+  //         format={dateFormat}
+  //         maxDate={dayjs(formatDate2(new Date()), dateFormat)}
+  //       />
+  //     </div>
+  //   );
+  // };
 
-  const inputEthnicMember = (index) => {
-    return (
-      <div>
-        <label className="block text-sm font-normal pb-2 text-gray-900">
-          Dân tộc <samp className="text-red-600">*</samp>
-        </label>
-        <Select
-          size="large"
-          className="w-[100%]"
-          ref={members[index].ethnicId}
-          dropdownStyle={{ maxWidth: "300px" }}
-          showSearch
-          dropdownMatchSelectWidth={false}
-          placeholder="Chọn dân tộc"
-          defaultValue={
-            insuranceOrder.houseHold.houseHoldPeoples[index].ethnicId
-          }
-          onChange={(value) => {
-            insuranceOrder.houseHold.houseHoldPeoples[index].ethnicId = value;
-          }}
-          filterOption={(input, option) =>
-            (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-          }
-          options={convertListToSelect(ethnicLists, "Chọn dân tộc")}
-        />
-      </div>
-    );
-  };
+  // const inputEthnicMember = (index: any) => {
+  //   return (
+  //     <div>
+  //       <label className="block text-sm font-normal pb-2 text-gray-900">
+  //         Dân tộc <samp className="text-red-600">*</samp>
+  //       </label>
+  //       <Select
+  //         size="large"
+  //         className="w-[100%]"
+  //         ref={members[index].ethnicId}
+  //         dropdownStyle={{ maxWidth: "300px" }}
+  //         showSearch
+  //         dropdownMatchSelectWidth={false}
+  //         placeholder="Chọn dân tộc"
+  //         defaultValue={
+  //           insuranceOrder.houseHold.houseHoldPeoples[index].ethnicId
+  //         }
+  //         onChange={(value) => {
+  //           insuranceOrder.houseHold.houseHoldPeoples[index].ethnicId = value;
+  //         }}
+  //         filterOption={(input, option) =>
+  //           (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+  //         }
+  //         options={convertListToSelect(ethnicLists, "Chọn dân tộc")}
+  //       />
+  //     </div>
+  //   );
+  // };
 
-  const boxhHouseHoldParticipants = (index, onClose) => {
-    return (
-      <div
-        key={`${index}`}
-        className="p-4 rounded-xl flex flex-col gap-6 border border-gray-300"
-      >
-        <div className="flex justify-between">
-          <div className="text-[#0076B7] text-sm font-medium">
-            Thông tin thành viên số {index + 1}
-          </div>
-          {index != 0 ? (
-            <button
-              type="button"
-              onClick={() => {
-                onClose(index);
-              }}
-            >
-              <img src={iconClose} className="w-3 h-3" />
-            </button>
-          ) : null}
-        </div>
+  // const boxhHouseHoldParticipants = (index: any, onClose: any) => {
+  //   return (
+  //     <div
+  //       key={`${index}`}
+  //       className="p-4 rounded-xl flex flex-col gap-6 border border-gray-300"
+  //     >
+  //       <div className="flex justify-between">
+  //         <div className="text-[#0076B7] text-sm font-medium">
+  //           Thông tin thành viên số {index + 1}
+  //         </div>
+  //         {index != 0 ? (
+  //           <button
+  //             type="button"
+  //             onClick={() => {
+  //               onClose(index);
+  //             }}
+  //           >
+  //             <img src={iconClose} className="w-3 h-3" />
+  //           </button>
+  //         ) : null}
+  //       </div>
 
-        {/* Số CCCD thành viên  */}
-        {inputCCCDMember(index)}
+  //       {/* Số CCCD thành viên  */}
+  //       {inputCCCDMember(index)}
 
-        {/* Dân tộc */}
-        {inputEthnicMember(index)}
+  //       {/* Dân tộc */}
+  //       {inputEthnicMember(index)}
 
-        {/* Giới tính thành viên */}
-        {inputGenderMemder(index)}
+  //       {/* Giới tính thành viên */}
+  //       {inputGenderMemder(index)}
 
-        {/* Họ tên */}
-        {inputFullNameMember(index)}
+  //       {/* Họ tên */}
+  //       {inputFullNameMember(index)}
 
-        {/* Mối quan hệ */}
-        {inputRelationshipMember(index)}
+  //       {/* Mối quan hệ */}
+  //       {inputRelationshipMember(index)}
 
-        {/* Ngày sinh */}
-        {inputDobMember(index)}
-      </div>
-    );
-  };
+  //       {/* Ngày sinh */}
+  //       {inputDobMember(index)}
+  //     </div>
+  //   );
+  // };
 
   const buttonAddMember = () => {
     return (
@@ -2922,7 +2925,7 @@ const RegisterBHXH = (props: any) => {
             citizenId: "",
           });
 
-          setInsuranceOrder((prevOrder) => ({
+          setInsuranceOrder((prevOrder: any) => ({
             ...prevOrder,
             houseHold: {
               ...prevOrder.houseHold,
@@ -3043,21 +3046,21 @@ const RegisterBHXH = (props: any) => {
 
           <Checkbox
             checked={isHadBHXH}
-            onChange={(e) => {
+            onChange={() => {
               if (isHadBHXH) {
                 setSocialInsuranceId("");
 
-                setInsuranceOrder((prevOrder) => ({
+                setInsuranceOrder((prevOrder: any) => ({
                   ...prevOrder,
                   listInsuredPerson: prevOrder.listInsuredPerson.map(
-                    (person, index) =>
+                    (person: any, index: any) =>
                       index === 0
                         ? { ...person, socialInsuranceNumber: "" }
                         : person
                   ),
                 }));
               } else {
-                setInsuranceOrder((prevOrder) => ({
+                setInsuranceOrder((prevOrder: any) => ({
                   ...prevOrder,
                   houseHold: {
                     id: 0,
@@ -3137,7 +3140,7 @@ const RegisterBHXH = (props: any) => {
               {/* Địa chỉ hộ khẩu */}
               {inputAddressDetailHKHouseHoldParticipants()}
 
-              {members.map((item, index) => (
+              {members.map((index: any) => (
                 <CardMembersHouseHoldBHXH
                   key={`member_${index}`}
                   members={members}
@@ -3146,7 +3149,9 @@ const RegisterBHXH = (props: any) => {
                   provinces={buyerProvinces.current}
                   index={index}
                   onClose={(index) => {
-                    const newMembers = members.filter((_, i) => i !== index);
+                    const newMembers = members.filter(
+                      (_: any, i: any) => i !== index
+                    );
                     setMembers([...newMembers]);
 
                     insuranceOrder.houseHold.houseHoldPeoples.splice(index, 1);
@@ -3162,7 +3167,13 @@ const RegisterBHXH = (props: any) => {
     );
   };
 
-  const drawRoundedRect = (ctx, x, y, width, height, radius) => {
+  const drawRoundedRect = (
+    ctx: any,
+    x: any,
+    y: any,
+    width: any,
+    radius: any
+  ) => {
     ctx.beginPath();
     ctx.moveTo(x + radius, y);
     ctx.lineTo(x + width - radius - width * 0.5, y);
@@ -3404,7 +3415,7 @@ const RegisterBHXH = (props: any) => {
           onChange={(e) => {
             let numberValue = e.target.value.replace(/\D/g, "");
             setPhone(numberValue);
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               phone: numberValue,
             }));
@@ -3429,7 +3440,7 @@ const RegisterBHXH = (props: any) => {
           placeholder="Nhập tên của bạn"
           onChange={(e) => {
             setBuyerName(e.target.value);
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               fullName: e.target.value,
             }));
@@ -3454,7 +3465,7 @@ const RegisterBHXH = (props: any) => {
           placeholder="Nhập email của bạn"
           onChange={(e) => {
             setEmail(e.target.value);
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               email: e.target.value,
             }));
@@ -3487,7 +3498,7 @@ const RegisterBHXH = (props: any) => {
             setSelectedBuyerWard(0);
 
             setSelectedBuyerProvince(value);
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               provinceId: value,
             }));
@@ -3525,7 +3536,7 @@ const RegisterBHXH = (props: any) => {
             setSelectedBuyerWard(0);
 
             setSelectedBuyerDistrict(value);
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               districtId: value,
             }));
@@ -3558,7 +3569,7 @@ const RegisterBHXH = (props: any) => {
           value={selectedBuyerWard}
           onChange={(value: any) => {
             setSelectedBuyerWard(value);
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               wardId: parseInt(value),
             }));
@@ -3587,7 +3598,7 @@ const RegisterBHXH = (props: any) => {
           placeholder="VD: Số nhà, số đường,...."
           onChange={(e) => {
             setBuyerAddressDetail(e.target.value);
-            setInsuranceOrder((prevOrder) => ({
+            setInsuranceOrder((prevOrder: any) => ({
               ...prevOrder,
               addressDetail: e.target.value,
             }));
@@ -3723,6 +3734,16 @@ const RegisterBHXH = (props: any) => {
     );
   };
 
+  const constraints = {
+    facingMode: "environment",
+    aspectRatio: { ideal: 18 / 6 },
+    frameRate: { ideal: 50 },
+    width: { ideal: 2160 },
+    height: { ideal: 720 },
+    echoCancellation: true,
+    suppressLocalAudioPlayback: true,
+  };
+
   const modalScanQR = () => {
     return (
       <>
@@ -3763,17 +3784,8 @@ const RegisterBHXH = (props: any) => {
 
             <Scanner
               paused={!isShowModelQR}
-              onError={(error) => {}}
-              constraints={{
-                facingMode: "environment",
-                aspectRatio: { ideal: 18 / 6 },
-                frameRate: { ideal: 50 },
-                width: { ideal: 2160 },
-                height: { ideal: 720 },
-                echoCancellation: true,
-                latency: { ideal: 0 },
-                suppressLocalAudioPlayback: true,
-              }}
+              onError={() => {}}
+              constraints={constraints}
               components={{
                 torch: false,
                 zoom: true,
@@ -3808,10 +3820,10 @@ const RegisterBHXH = (props: any) => {
 
                     // số căn cước
                     setCitizenId(words[0]);
-                    setInsuranceOrder((prevOrder) => ({
+                    setInsuranceOrder((prevOrder: any) => ({
                       ...prevOrder,
                       listInsuredPerson: prevOrder.listInsuredPerson.map(
-                        (person, index) =>
+                        (person: any, index: any) =>
                           index === 0
                             ? { ...person, citizenId: words[0] }
                             : person
@@ -3819,10 +3831,10 @@ const RegisterBHXH = (props: any) => {
                     }));
                     // họ và tên
                     setPersonName(words[2]);
-                    setInsuranceOrder((prevOrder) => ({
+                    setInsuranceOrder((prevOrder: any) => ({
                       ...prevOrder,
                       listInsuredPerson: prevOrder.listInsuredPerson.map(
-                        (person, index) =>
+                        (person: any, index: any) =>
                           index === 0
                             ? { ...person, fullName: words[2] }
                             : person
@@ -3837,10 +3849,10 @@ const RegisterBHXH = (props: any) => {
                     // set năm sinh
                     setDateValue(dayjs(`${day}-${month}-${year}`, dateFormat));
 
-                    setInsuranceOrder((prevOrder) => ({
+                    setInsuranceOrder((prevOrder: any) => ({
                       ...prevOrder,
                       listInsuredPerson: prevOrder.listInsuredPerson.map(
-                        (person, index) =>
+                        (person: any, index: any) =>
                           index === 0
                             ? {
                                 ...person,
@@ -3853,17 +3865,19 @@ const RegisterBHXH = (props: any) => {
                     }));
 
                     setGender(words[4]); // giới tính
-                    setInsuranceOrder((prevOrder) => ({
+                    setInsuranceOrder((prevOrder: any) => ({
                       ...prevOrder,
                       listInsuredPerson: prevOrder.listInsuredPerson.map(
-                        (person, index) =>
+                        (person: any, index: any) =>
                           index === 0 ? { ...person, gender: words[4] } : person
                       ),
                     }));
 
                     setSize({ width: 200, height: 200 });
                   }, 1000);
-                } catch (error) {}
+                } catch (error: any) {
+                  console.log(error);
+                }
               }}
               allowMultiple={false}
               styles={{

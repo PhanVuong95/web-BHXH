@@ -1,21 +1,21 @@
 import React, { createContext, useState, ReactNode } from "react";
 
 interface Member {
-  id?: number,
-  name?: string,
-  doB?: string,
-  gender?: string,
-  ethnicId?: number,
-  relationShipId?: string,
-  citizenId?: string,
-  ksProvinceId?: number,
-  ksDistrictId?: number,
-  ksWardId?: number,
-  ksAddressDetail?: string
+  id?: number;
+  name?: string;
+  doB?: string;
+  gender?: string;
+  ethnicId?: number;
+  relationShipId?: string;
+  citizenId?: string;
+  ksProvinceId?: number;
+  ksDistrictId?: number;
+  ksWardId?: number;
+  ksAddressDetail?: string;
 }
 
 interface InsuredPerson {
-  id: number,
+  id: number;
   insuranceProvinceId: number;
   socialInsuranceNumber?: string;
   citizenId: string;
@@ -40,11 +40,11 @@ interface InsuredPerson {
   ttQuanHuyenMa?: number;
   ttXaPhuongMa?: number;
   ethnicId?: number;
-  medicalProvinceId?: number,
-  medicalDistrictId?: number,
-  hospitalId?: number,
-  vungLuongToiThieuId?: number,
-  benefitLevel?: string,
+  medicalProvinceId?: number;
+  medicalDistrictId?: number;
+  hospitalId?: number;
+  vungLuongToiThieuId?: number;
+  benefitLevel?: string;
 }
 
 interface InsuranceOrder {
@@ -64,19 +64,19 @@ interface InsuranceOrder {
   addressDetail?: string;
   listInsuredPerson: InsuredPerson[];
   houseHold?: {
-    "id": number,
-    "chuHoTen": string,
-    "ksProvinceId": number,
-    "ksDistrictId": number,
-    "ksWardId": number,
-    "ksAddressDetail": string,
-    "hkAddressDetail": string,
-    "soGiayToCaNhan": string,
-    "ttProvinceId": number,
-    "ttDistrictId": number,
-    "ttWardId": number,
-    houseHoldPeoples?: Member[]
-  }
+    id: number;
+    chuHoTen: string;
+    ksProvinceId: number;
+    ksDistrictId: number;
+    ksWardId: number;
+    ksAddressDetail: string;
+    hkAddressDetail: string;
+    soGiayToCaNhan: string;
+    ttProvinceId: number;
+    ttDistrictId: number;
+    ttWardId: number;
+    houseHoldPeoples?: Member[];
+  };
 }
 interface SpecificContextType {
   insuranceOrder: InsuranceOrder;
@@ -129,29 +129,29 @@ export const SpecificProvider: React.FC<{ children: ReactNode }> = ({
         ksDiaChi: "",
       },
     ],
-    "houseHold": {
-      "id": 0,
-      "chuHoTen": "",
-      "ksProvinceId": 0,
-      "ksDistrictId": 0,
-      "ksWardId": 0,
-      "ksAddressDetail": "",
-      "hkAddressDetail": "",
-      "soGiayToCaNhan": "",
-      "ttProvinceId": 0,
-      "ttDistrictId": 0,
-      "ttWardId": 0,
-      "houseHoldPeoples": [
+    houseHold: {
+      id: 0,
+      chuHoTen: "",
+      ksProvinceId: 0,
+      ksDistrictId: 0,
+      ksWardId: 0,
+      ksAddressDetail: "",
+      hkAddressDetail: "",
+      soGiayToCaNhan: "",
+      ttProvinceId: 0,
+      ttDistrictId: 0,
+      ttWardId: 0,
+      houseHoldPeoples: [
         {
-          "id": 0,
-          "name": "",
-          "doB": "",
-          "gender": "",
-          "ethnicId": 0,
-          "relationShipId": "0",
-          "citizenId": ""
-        }
-      ]
+          id: 0,
+          name: "",
+          doB: "",
+          gender: "",
+          ethnicId: 0,
+          relationShipId: "0",
+          citizenId: "",
+        },
+      ],
     },
   });
   return (

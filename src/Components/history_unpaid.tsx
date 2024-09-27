@@ -4,7 +4,7 @@ import { useParams } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
 import { PulseLoader } from "react-spinners";
 import { formatDate } from "../Utils/validateString";
-import { SpecificContext } from "./specific_context";
+import { SpecificContext } from "./specificContext";
 import logo from "../assets-src/logo1.png";
 
 const HistoryUnpaidPage: React.FunctionComponent = () => {
@@ -133,28 +133,29 @@ const HistoryUnpaidPage: React.FunctionComponent = () => {
     return `${hours}:${minutes} - ${day}/${month}/${year}`;
   }
 
-  function formatDateString(dateString: string): string {
-    // Chuyển chuỗi ngày tháng thành đối tượng Date
-    const date = new Date(dateString);
+  // function formatDateString(dateString: string): string {
+  //   // Chuyển chuỗi ngày tháng thành đối tượng Date
+  //   const date = new Date(dateString);
 
-    if (isNaN(date.getTime())) {
-      return "Invalid date";
-    }
+  //   if (isNaN(date.getTime())) {
+  //     return "Invalid date";
+  //   }
 
-    let day: number | string = date.getDate();
-    let month: number | string = date.getMonth() + 1; // Tháng bắt đầu từ 0 nên cần +1
-    const year: number = date.getFullYear();
+  //   let day: number | string = date.getDate();
+  //   let month: number | string = date.getMonth() + 1; // Tháng bắt đầu từ 0 nên cần +1
+  //   const year: number = date.getFullYear();
 
-    // Đảm bảo ngày và tháng có 2 chữ số
-    if (day < 10) {
-      day = "0" + day;
-    }
-    if (month < 10) {
-      month = "0" + month;
-    }
+  //   // Đảm bảo ngày và tháng có 2 chữ số
+  //   if (day < 10) {
+  //     day = "0" + day;
+  //   }
+  //   if (month < 10) {
+  //     month = "0" + month;
+  //   }
 
-    return `${day}/${month}/${year}`;
-  }
+  //   return `${day}/${month}/${year}`;
+  // }
+
   if (!orderDetail || !insuredPerson || !orderStatusId) {
     return (
       <>

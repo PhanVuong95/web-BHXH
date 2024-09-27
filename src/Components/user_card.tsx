@@ -1,21 +1,23 @@
 import React from "react";
 import { toast } from "react-toastify";
-import logo from "../assets-src/logo1.png";
 
+interface User {
+  name: string;
+}
 
+interface UserCardProps {
+  user: User;
+}
 
-const UserCard: React.FunctionComponent = ({  }) => {
+const UserCard: React.FunctionComponent<UserCardProps> = ({ user }) => {
   return (
     <div className="box-user w-full flex py-[24px] px-[16px] flex justify-between items-center">
       <div className="flex justify-between items-center">
-        <img
-          className="rounded-full w-[50px] h-[50px]"
-          src=""
-        />
+        <img className="rounded-full w-[50px] h-[50px]" src="" />
 
-        <div >
+        <div>
           <p className="text-lg font-semibold">
-            Xin chào, Quý khách
+            Xin chào, Quý khách {user.name}
           </p>
         </div>
       </div>

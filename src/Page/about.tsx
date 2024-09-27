@@ -10,12 +10,17 @@ const AboutPage: React.FunctionComponent = () => {
       </div>
       <div>
         <button
-          variant='secondary'
-          fullWidth
           onClick={() => setActionSheetOpened(true)}
+          style={{ width: "100%", backgroundColor: "#f0f0f0" }} // Example styling
         >
-          Back
+          Show Action Sheet
         </button>
+        {actionSheetOpened && (
+          <div className="action-sheet">
+            <p>This is the action sheet content.</p>
+            <button onClick={() => setActionSheetOpened(false)}>Close</button>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import logo from "../../assets-src/logo1.png";
 
 import { useParams } from "react-router-dom";
 import {
@@ -10,7 +11,7 @@ import {
   formatTime,
   isValidEmptyString,
   isValidString,
-} from "../../utils/validateString";
+} from "../../Utils/validateString";
 import { registerInfoBHYT } from "./list_health_insurance";
 import HeaderBase from "../../Components/headerBase";
 
@@ -26,7 +27,7 @@ const InfoDetailBHYT: React.FunctionComponent = () => {
   const DONE = 1002;
   const CANCELED = 1003;
 
-  const renderBackground = (insuranceOrderStatusId) => {
+  const renderBackground = (insuranceOrderStatusId: any) => {
     switch (insuranceOrderStatusId) {
       case PENDING:
         return "bg-[#F4A460]";
@@ -87,7 +88,7 @@ const InfoDetailBHYT: React.FunctionComponent = () => {
           data?.houseHold?.soGiayToCaNhan;
 
         registerInfoBHYT["houseHold"]["houseHoldPeoples"] =
-          data?.houseHold?.houseHoldPeoples.map((item) => {
+          data?.houseHold?.houseHoldPeoples.map((item: any) => {
             const obj = Object.assign({}, item);
             obj["id"] = item["id"];
             obj["name"] = item["name"];
@@ -105,7 +106,7 @@ const InfoDetailBHYT: React.FunctionComponent = () => {
           });
 
         registerInfoBHYT["listInsuredPerson"] = data?.listInsuredPerson.map(
-          (item) => {
+          (item: any) => {
             const obj = Object.assign({}, item);
             obj["id"] = item["id"];
             obj["insuranceProvinceId"] = item["insuranceProvinceId"];
@@ -158,7 +159,7 @@ const InfoDetailBHYT: React.FunctionComponent = () => {
       )
       .then((response) => {
         const data = response.data.data.filter(
-          (item) => item.id == insuranceid
+          (item: any) => item.id == insuranceid
         )[0];
 
         insurance.current = data;
@@ -251,7 +252,7 @@ const InfoDetailBHYT: React.FunctionComponent = () => {
         {loading ? (
           <div></div>
         ) : (
-          billPay.listInsuredPerson.map((item, index) => {
+          billPay.listInsuredPerson.map((item: any, index: any) => {
             return boxBeneficiary(item, index);
           })
         )}
@@ -259,7 +260,7 @@ const InfoDetailBHYT: React.FunctionComponent = () => {
     );
   };
 
-  const boxBeneficiary = (item, index) => {
+  const boxBeneficiary = (item: any, index: any) => {
     return (
       <div className="bg-white rounded-xl flex flex-col gap-6 mt-4">
         {line()}

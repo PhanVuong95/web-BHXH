@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Province } from "../../Models";
 import { registerInfoBHYT } from "./list_health_insurance";
@@ -25,6 +25,7 @@ import CardObject from "../../Components/card_object";
 import HeaderBase from "../../Components/headerBase";
 
 const RegisterBHYT = ({}) => {
+  const navigate = useNavigate();
   const { state } = useLocation();
   const [provinces, setProvinces] = useState<Province[]>([]);
   const fileUploadUrl = useRef<HTMLInputElement>(null);
@@ -32,7 +33,7 @@ const RegisterBHYT = ({}) => {
   const [fileUpload, setFileUpload] = useState(
     registerInfoBHYT["fileUploadUrl"]
   );
-  const [windowSize, setWindowSize] = useState({
+  const [windowSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
   });
@@ -207,7 +208,7 @@ const RegisterBHYT = ({}) => {
       });
   }, []);
 
-  const scrollToElement = (input, boxNumber) => {
+  const scrollToElement = (input: any, boxNumber: any) => {
     switch (boxNumber) {
       case 1:
         userBuyerPageRefs[input].current.focus();
@@ -251,7 +252,7 @@ const RegisterBHYT = ({}) => {
     return finalPrice;
   };
 
-  const calculateInsuredPersonPrice = (index) => {
+  const calculateInsuredPersonPrice = (index: any) => {
     const BHYTprice = state.data.price;
 
     switch (index) {
@@ -772,7 +773,7 @@ const RegisterBHYT = ({}) => {
     }
   };
 
-  const updateFile = (file) => {
+  const updateFile = (file: any) => {
     setFileUpload(file);
     registerInfoBHYT["fileUploadUrl"] = file;
     setLoadingFileUploadUrl(false);
@@ -881,7 +882,7 @@ const RegisterBHYT = ({}) => {
             <div className="flex gap-2">
               <input
                 type="checkbox"
-                onChange={(e) => {
+                onChange={() => {
                   policyTerm2.current = !policyTerm2.current;
                 }}
                 className="relative appearance-none bg-white w-5 h-5 border rounded-full border-gray-400 cursor-pointer checked:bg-[#0076B7]"
@@ -905,7 +906,7 @@ const RegisterBHYT = ({}) => {
     );
   };
 
-  const onCreate = async (token) => {
+  const onCreate = async (token: any) => {
     const response = await axios.post(
       "https://baohiem.dion.vn/insuranceorder/api/add-order",
       registerInfoBHYT,
@@ -923,7 +924,7 @@ const RegisterBHYT = ({}) => {
       registerInfoBHYT["insuranceId"] = result.insuranceId;
       registerInfoBHYT["accountId"] = result.accountId;
 
-      result.houseHold.houseHoldPeoples.map((item) => {
+      result.houseHold.houseHoldPeoples.map((item: any) => {
         delete item.createdTime;
         return item;
       });
@@ -936,7 +937,7 @@ const RegisterBHYT = ({}) => {
     navigate(`/bill-pay-bhyt/${registerInfoBHYT["id"]}`);
   };
 
-  const onUpdate = async (token) => {
+  const onUpdate = async (token: any) => {
     const response = await axios.post(
       "https://baohiem.dion.vn/insuranceorder/api/update-insuranceOrder",
       registerInfoBHYT,
@@ -1071,7 +1072,7 @@ const RegisterBHYT = ({}) => {
         <div className="p-4 bg-white rounded-xl flex flex-col gap-6">
           <CardHouseHold refs={houseHoldRefs} />
 
-          {members.map((member, index) => (
+          {members.map((member: any, index: any) => (
             <CardMembersHouseHold
               key={`${index}`}
               item={member}

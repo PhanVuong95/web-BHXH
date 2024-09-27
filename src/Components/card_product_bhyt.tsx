@@ -2,13 +2,35 @@ import { formatMoneyVND } from "../Utils/validateString";
 import logo from "../assets-src/logo1.png";
 import { useNavigate } from "react-router-dom";
 
-const CardProductBHYT = ({ url, data }) => {
+// Define the type for the insurance benefit item
+interface InsuranceBenefit {
+  name: string;
+}
+
+// Define the type for the data prop
+interface DataProps {
+  name: string;
+  monthDuration: number;
+  price: number;
+  towards: string;
+  medicalSupport: string;
+  ageLimit: number;
+  insuranceBenefits: InsuranceBenefit[];
+}
+
+// Define the props for the CardProductBHYT component
+interface CardProductBHYTProps {
+  url: string; // Adjust the type based on your requirements
+  data: DataProps;
+}
+
+const CardProductBHYT: React.FC<CardProductBHYTProps> = ({ url, data }) => {
   const navigate = useNavigate();
 
   return (
     <div className="p-4 bg-white w-full rounded-xl flex flex-col gap-4">
       <div className="flex gap-[10px]">
-        <img src={logo} className="w-20 h-20" />
+        <img src={logo} className="w-20 h-20" alt="Logo" />
         <div className="title-product flex flex-col">
           <h3 className="text-[#0076B7] text-lg font-medium">{data?.name}</h3>
           <p className="text-[#646464] text-sm font-normal">
@@ -21,7 +43,7 @@ const CardProductBHYT = ({ url, data }) => {
         </div>
       </div>
 
-      <hr className="border-dashed border-[1px] text-[#DEE7FE] "></hr>
+      <hr className="border-dashed border-[1px] text-[#DEE7FE] " />
 
       <div className="flex flex-col gap-4">
         <div className="flex flex-row justify-between w-full">
@@ -54,15 +76,15 @@ const CardProductBHYT = ({ url, data }) => {
           </div>
           <div>
             <p className="text-[#2E2E2E] text-sm font-semibold max-w-[142px] text-right">
-              {data?.ageLimit == 0
+              {data?.ageLimit === 0
                 ? "Không giới hạn"
-                : "Trên ${data?.ageLimit} tuổi"}
+                : `Trên ${data?.ageLimit} tuổi`}
             </p>
           </div>
         </div>
       </div>
 
-      <hr className="border-dashed border-[1px] text-[#DEE7FE] "></hr>
+      <hr className="border-dashed border-[1px] text-[#DEE7FE] " />
 
       <div className="flex flex-col gap-4">
         <div>
@@ -70,8 +92,8 @@ const CardProductBHYT = ({ url, data }) => {
             Quyền lợi nổi trội
           </p>
         </div>
-        {data?.insuranceBenefits.map((item) => (
-          <div className="flex flex-row w-full gap-4">
+        {data?.insuranceBenefits.map((item: InsuranceBenefit) => (
+          <div key={item.name} className="flex flex-row w-full gap-4">
             <div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -88,9 +110,7 @@ const CardProductBHYT = ({ url, data }) => {
               </svg>
             </div>
             <div>
-              <p className="text-[#2E2E2E] text-sm font-normal ">
-                {item?.name}
-              </p>
+              <p className="text-[#2E2E2E] text-sm font-normal">{item?.name}</p>
             </div>
           </div>
         ))}

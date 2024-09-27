@@ -1,19 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Widthheight } from "../models";
+import { Widthheight } from "../Models";
 import axios from "axios";
 import { PulseLoader } from "react-spinners";
 import HeaderBase from "../Components/headerBase";
+import logo from "../assets-src/logo1.png";
 
-const ListsHistoryPage: React.FC<Widthheight> = ({ url }) => {
+// Define an interface for the order item
+interface OrderItem {
+  id: string;
+  insuranceName: string;
+  monthInsured: number;
+  finalPrice: number;
+  insuranceOrderStatusId: number;
+  insuranceOrderStatusName: string;
+  createdTime: string; // Assuming this is a string; change if necessary
+  fullName: string;
+  statusColor?: string; // Optional property
+}
+
+const ListsHistoryPage: React.FC<Widthheight> = () => {
   const navigate = useNavigate();
 
   const PENDING = 1001;
   const DONE = 1002;
   const CANCELED = 1003;
 
-  const [openTab, setOpenTab] = useState(1);
-  const [listOrder, setListOrder] = useState<any>([]);
+  const [openTab, setOpenTab] = useState<number>(1);
+  const [listOrder, setListOrder] = useState<OrderItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const token = localStorage.token;
 
@@ -28,19 +42,18 @@ const ListsHistoryPage: React.FC<Widthheight> = ({ url }) => {
         }
       )
       .then((response) => {
-        let fillteredOrders: any = [];
-        response.data.data.forEach((item) => {
-          if (item.insuranceOrderStatusId == DONE && openTab == 2) {
-            fillteredOrders.push(item);
+        let filteredOrders: OrderItem[] = [];
+        response.data.data.forEach((item: OrderItem) => {
+          if (item.insuranceOrderStatusId === DONE && openTab === 2) {
+            filteredOrders.push(item);
           } else if (
-            (item.insuranceOrderStatusId == PENDING && openTab == 1) ||
-            (item.insuranceOrderStatusId == CANCELED && openTab == 1)
+            (item.insuranceOrderStatusId === PENDING && openTab === 1) ||
+            (item.insuranceOrderStatusId === CANCELED && openTab === 1)
           ) {
-            fillteredOrders.push(item);
+            filteredOrders.push(item);
           }
         });
-        setListOrder(fillteredOrders);
-
+        setListOrder(filteredOrders);
         setLoading(false);
       })
       .catch((error) => {
@@ -48,9 +61,9 @@ const ListsHistoryPage: React.FC<Widthheight> = ({ url }) => {
         setListOrder([]);
         setLoading(false);
       });
-  }, [openTab]);
+  }, [openTab, token]);
 
-  function formatDateTime(dateTimeString) {
+  function formatDateTime(dateTimeString: string): string {
     const date = new Date(dateTimeString);
 
     const hours = String(date.getHours()).padStart(2, "0");
@@ -115,7 +128,7 @@ const ListsHistoryPage: React.FC<Widthheight> = ({ url }) => {
           </div>
 
           <div className="flex flex-col gap-4">
-            {listOrder.length == 0 ? (
+            {listOrder.length === 0 ? (
               <div
                 style={{
                   height: "100%",
@@ -127,12 +140,12 @@ const ListsHistoryPage: React.FC<Widthheight> = ({ url }) => {
                 <p>Không có dữ liệu!</p>
               </div>
             ) : (
-              listOrder?.map((item, index) => {
-                return !loading ? (
+              listOrder.map((item, index) => {
+                return (
                   <Link to={"/history-unpaid/" + item.id} key={index}>
                     <div className="p-4 bg-white w-full rounded-xl flex flex-col gap-4">
                       <div className="flex gap-[10px]">
-                        <img src={logo} className="w-16 h-16" />
+                        <img src={logo} className="w-16 h-16" alt="Logo" />
                         <div className="title-product flex flex-col">
                           <h3 className="text-[#0076B7] text-lg font-medium">
                             {item.insuranceName}
@@ -146,7 +159,7 @@ const ListsHistoryPage: React.FC<Widthheight> = ({ url }) => {
                         </div>
                       </div>
 
-                      <hr className="border-dashed border-[1px] text-[#DEE7FE] "></hr>
+                      <hr className="border-dashed border-[1px] text-[#DEE7FE] " />
 
                       <div className="flex flex-col gap-4">
                         <div className="flex flex-row justify-between w-full">
@@ -171,7 +184,7 @@ const ListsHistoryPage: React.FC<Widthheight> = ({ url }) => {
                           <div>
                             <p
                               className={`text-[${
-                                item.statusColor ? item.statusColor : "#FAAD14"
+                                item.statusColor || "#FAAD14"
                               }] text-sm font-semibold max-w-[142px] text-right`}
                             >
                               {item.insuranceOrderStatusName}
@@ -207,97 +220,10 @@ const ListsHistoryPage: React.FC<Widthheight> = ({ url }) => {
                       </div>
                     </div>
                   </Link>
-                ) : (
-                  <div></div>
                 );
               })
             )}
           </div>
-
-          {/* {openTab === 2 && (
-            <div className="flex flex-col gap-4">
-              {listOrder.length == 0 ? (
-                <div
-                  style={{
-                    height: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <p>Không có dữ liệu!</p>
-                </div>
-              ) : (
-                listOrder?.map((item, index) => {
-                  return (
-                    <Link to={"/history-unpaid/" + item.id} key={index}>
-                      <div className="p-4 bg-white w-full rounded-xl flex flex-col gap-4">
-                        <div className="flex gap-[10px]">
-                          <img src={logo} className="w-16 h-16" />
-                          <div className="title-product flex flex-col">
-                            <h3 className="text-[#0076B7] text-lg font-medium">
-                              BH Xã Hội Tự nguyện
-                            </h3>
-                            <p className="text-[#646464] text-sm font-normal">
-                              {item.monthInsured} tháng
-                            </p>
-                            <span className="text-[#0076B7] text-lg font-bold">
-                              {item.finalPrice.toLocaleString("vi-VN")} VND
-                            </span>
-                          </div>
-                        </div>
-
-                        <hr className="border-dashed border-[1px] text-[#DEE7FE] "></hr>
-
-                        <div className="flex flex-col gap-4">
-                          <div className="flex flex-row justify-between w-full">
-                            <div>
-                              <p className="text-[#646464] text-sm font-normal">
-                                Trạng thái
-                              </p>
-                            </div>
-                            <div>
-                              <p
-                                className={`text-[${item.statusColor ? item.statusColor : '#FAAD14'}] text-sm font-semibold max-w-[142px] text-right`}
-                              >
-                                {item.insuranceOrderStatusName}
-                              </p>
-                            </div>
-                          </div>
-
-                          <div className="flex flex-row justify-between w-full">
-                            <div>
-                              <p className="text-[#646464] text-sm font-normal">
-                                Ngày đăng ký
-                              </p>
-                            </div>
-                            <div>
-                              <p className="text-[#2E2E2E] text-sm font-semibold max-w-[142px] text-right">
-                                {formatDateTime(item.createdTime)}
-                              </p>
-                            </div>
-                          </div>
-
-                          <div className="flex flex-row justify-between w-full">
-                            <div>
-                              <p className="text-[#646464] text-sm font-normal">
-                                Người mua
-                              </p>
-                            </div>
-                            <div>
-                              <p className="text-[#2E2E2E] text-sm font-semibold max-w-[142px] text-right">
-                                {item.fullName}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
-                  );
-                })
-              )}
-            </div>
-          )} */}
         </div>
       </div>
     </>

@@ -1,11 +1,11 @@
 import { DatePicker, Input, Select } from "antd";
-import React, { useEffect, useRef, useState } from "react";
+import  { useEffect, useRef, useState } from "react";
 import iconClose from "../assets-src/close_1.png";
 import { registerInfoBHYT } from "../Page/BHYT/list_health_insurance";
 import "../locale/vi";
 import locale from "antd/es/date-picker/locale/vi_VN";
 import dayjs from "dayjs";
-import { convertListToSelect, formatDate2 } from "../utils/validateString";
+import { convertListToSelect, formatDate2 } from "../Utils/validateString";
 import axios from "axios";
 
 interface Props {
@@ -19,9 +19,9 @@ interface Props {
 }
 
 const CardMembersHouseHold = (props: Props) => {
-  const { item, index, members, ethnicLists, onClose, refs, provinces } = props;
+  const { index, ethnicLists, onClose, refs, provinces } = props;
 
-  const memberProvinces = useRef([]);
+  // const memberProvinces = useRef([]);
   const memberDistricts = useRef([]);
   const memberWards = useRef([]);
 

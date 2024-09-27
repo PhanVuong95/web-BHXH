@@ -1,7 +1,7 @@
 import React from "react";
 import imgSlider from "../assets-src/image-1002.png";
 
-const CardNewPage: React.FunctionComponent = (props) => {
+const CardNewPage: React.FunctionComponent = () => {
   return (
     <div className="card-new">
       <img src={imgSlider} alt="img-slider" />

@@ -8,12 +8,10 @@ import {
   formatDate,
   formatDate2,
   formatMoneyVND,
-  formatTimeSql,
   isValidCitizenId,
-  isValidEmptyString,
   isValidHealthInsuranceNumber,
   isValidSocialInsuranceNumber,
-} from "../utils/validateString";
+} from "../Utils/validateString";
 import { IDetectedBarcode, Scanner } from "@yudiel/react-qr-scanner";
 import iconClose from "../assets-src/close_1.png";
 import imageQR from "../assets-src/icon_qr.png";
@@ -26,7 +24,7 @@ import Modal from "react-modal";
 import Lottie from "lottie-react";
 import lottieScanQR from "../assets-src/lottie_scan_qr.json";
 import { motion } from "framer-motion";
-import { BenefitLevevlList } from "../utils/constants";
+import { BenefitLevevlList } from "../Utils/constants";
 
 dayjs.locale("vi");
 dayjs.extend(customParseFormat);
@@ -85,30 +83,30 @@ const UserBeneficiaryBHYTPage = (props: Props) => {
   const [ethnic, setEthnic] = useState(
     registerInfoBHYT["listInsuredPerson"][index].ethnicId
   );
-  const [oldCardStartDate, setOldCardStartDate] = useState<any>(
-    registerInfoBHYT["listInsuredPerson"][index].oldCardStartDate == ""
-      ? ""
-      : dayjs(
-          registerInfoBHYT["listInsuredPerson"][index].oldCardStartDate.trim(),
-          "DD/MM/YYYY"
-        )
-  );
-  const [oldCardEndDate, setOldCardEndDate] = useState<any>(
-    registerInfoBHYT["listInsuredPerson"][index].oldCardEndDate == ""
-      ? ""
-      : dayjs(
-          registerInfoBHYT["listInsuredPerson"][index].oldCardEndDate.trim(),
-          "DD/MM/YYYY"
-        )
-  );
-  const [newCardEndDate, setNewCardEndDate] = useState(
-    registerInfoBHYT["listInsuredPerson"][index].newCardEndDate == ""
-      ? ""
-      : dayjs(
-          registerInfoBHYT["listInsuredPerson"][index].newCardEndDate.trim(),
-          "DD/MM/YYYY"
-        )
-  );
+  // const [oldCardStartDate, setOldCardStartDate] = useState<any>(
+  //   registerInfoBHYT["listInsuredPerson"][index].oldCardStartDate == ""
+  //     ? ""
+  //     : dayjs(
+  //         registerInfoBHYT["listInsuredPerson"][index].oldCardStartDate.trim(),
+  //         "DD/MM/YYYY"
+  //       )
+  // );
+  // const [oldCardEndDate, setOldCardEndDate] = useState<any>(
+  //   registerInfoBHYT["listInsuredPerson"][index].oldCardEndDate == ""
+  //     ? ""
+  //     : dayjs(
+  //         registerInfoBHYT["listInsuredPerson"][index].oldCardEndDate.trim(),
+  //         "DD/MM/YYYY"
+  //       )
+  // );
+  // const [newCardEndDate, setNewCardEndDate] = useState(
+  //   registerInfoBHYT["listInsuredPerson"][index].newCardEndDate == ""
+  //     ? ""
+  //     : dayjs(
+  //         registerInfoBHYT["listInsuredPerson"][index].newCardEndDate.trim(),
+  //         "DD/MM/YYYY"
+  //       )
+  // );
   const [newCardStartDate, setNewCardStartDate] = useState<any>(
     registerInfoBHYT["listInsuredPerson"][index].newCardStartDate == ""
       ? ""
@@ -138,8 +136,8 @@ const UserBeneficiaryBHYTPage = (props: Props) => {
   const ksDistricts = useRef([]);
   const ksWards = useRef([]);
 
-  const [selectedProvinceParticipate, setSelectedProvinceParticipate] =
-    useState(registerInfoBHYT["listInsuredPerson"][index].insuranceProvinceId);
+  // const [selectedProvinceParticipate, setSelectedProvinceParticipate] =
+  //   useState(registerInfoBHYT["listInsuredPerson"][index].insuranceProvinceId);
   const [selectedKSProvince, setSelectedKSProvince] = useState<number>(
     registerInfoBHYT["listInsuredPerson"][index].ksTinhThanhMa
   );
@@ -391,13 +389,13 @@ const UserBeneficiaryBHYTPage = (props: Props) => {
     }
   };
 
-  const updateBackCitizenPhoto = (img) => {
+  const updateBackCitizenPhoto = (img: any) => {
     setPhotoCitizenBack(img);
     registerInfoBHYT["listInsuredPerson"][index].photoCitizenBack = img;
     setIsUploadingPhotoCitizenBack(false);
   };
 
-  const updateFrontCitizenPhoto = (img) => {
+  const updateFrontCitizenPhoto = (img: any) => {
     setPhotoCitizenFront(img);
     registerInfoBHYT["listInsuredPerson"][index].photoCitizenFront = img;
     setIsUploadingPhotoCitizenFont(false);
@@ -586,7 +584,13 @@ const UserBeneficiaryBHYTPage = (props: Props) => {
     },
   };
 
-  const drawRoundedRect = (ctx, x, y, width, height, radius) => {
+  const drawRoundedRect = (
+    ctx: any,
+    x: any,
+    y: any,
+    width: any,
+    radius: any
+  ) => {
     ctx.beginPath();
     ctx.moveTo(x + radius, y);
     ctx.lineTo(x + width - radius - width * 0.5, y);
@@ -618,6 +622,16 @@ const UserBeneficiaryBHYTPage = (props: Props) => {
     ctx.strokeStyle = "red";
     ctx.lineWidth = 2;
     ctx.stroke();
+  };
+
+  const constraints = {
+    facingMode: "environment",
+    aspectRatio: { ideal: 18 / 6 },
+    frameRate: { ideal: 50 },
+    width: { ideal: 2160 },
+    height: { ideal: 720 },
+    echoCancellation: true,
+    suppressLocalAudioPlayback: true,
   };
 
   const renderUploadImages = () => {
@@ -674,17 +688,8 @@ const UserBeneficiaryBHYTPage = (props: Props) => {
 
               <Scanner
                 paused={!isShowModelQR}
-                onError={(error) => {}}
-                constraints={{
-                  facingMode: "environment",
-                  aspectRatio: { ideal: 18 / 6 },
-                  frameRate: { ideal: 50 },
-                  width: { ideal: 2160 },
-                  height: { ideal: 720 },
-                  echoCancellation: true,
-                  latency: { ideal: 0 },
-                  suppressLocalAudioPlayback: true,
-                }}
+                onError={() => {}}
+                constraints={constraints}
                 components={{
                   torch: false,
                   zoom: true,
@@ -1122,67 +1127,67 @@ const UserBeneficiaryBHYTPage = (props: Props) => {
     );
   };
 
-  const renderBoxOldCard = () => {
-    return (
-      <div className="flex flex-col">
-        <h3 className="text-base font-semibold text-[#0076B7] pb-[24px]">
-          Thẻ cũ
-        </h3>
+  // const renderBoxOldCard = () => {
+  //   return (
+  //     <div className="flex flex-col">
+  //       <h3 className="text-base font-semibold text-[#0076B7] pb-[24px]">
+  //         Thẻ cũ
+  //       </h3>
 
-        <div className="flex flex-col gap-4">
-          <div>
-            <label className="block text-sm font-normal pb-2 text-gray-900">
-              Ngày hiệu lực <samp className="text-red-600">*</samp>
-            </label>
-            <input
-              type="date"
-              min={new Date().toISOString().split("T")[0]}
-              ref={refs.oldCardStartDate}
-              value={oldCardStartDate}
-              onChange={(e) => {
-                const value = e.target.value;
+  //       <div className="flex flex-col gap-4">
+  //         <div>
+  //           <label className="block text-sm font-normal pb-2 text-gray-900">
+  //             Ngày hiệu lực <samp className="text-red-600">*</samp>
+  //           </label>
+  //           <input
+  //             type="date"
+  //             min={new Date().toISOString().split("T")[0]}
+  //             ref={refs.oldCardStartDate}
+  //             value={oldCardStartDate}
+  //             onChange={(e) => {
+  //               const value = e.target.value;
 
-                setOldCardStartDate(value);
+  //               setOldCardStartDate(value);
 
-                registerInfoBHYT["listInsuredPerson"][index].oldCardStartDate =
-                  formatDate(value);
-              }}
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Chọn ngày sinh"
-              required
-            />
-          </div>
+  //               registerInfoBHYT["listInsuredPerson"][index].oldCardStartDate =
+  //                 formatDate(value);
+  //             }}
+  //             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+  //             placeholder="Chọn ngày sinh"
+  //             required
+  //           />
+  //         </div>
 
-          <div>
-            <label className="block text-sm font-normal pb-2 text-gray-900">
-              Ngày hết hiệu lực <samp className="text-red-600">*</samp>
-            </label>
-            <input
-              type="date"
-              id="oldCardEndDate"
-              ref={refs.oldCardEndDate}
-              value={oldCardEndDate}
-              onChange={(e) => {
-                const value = e.target.value;
+  //         <div>
+  //           <label className="block text-sm font-normal pb-2 text-gray-900">
+  //             Ngày hết hiệu lực <samp className="text-red-600">*</samp>
+  //           </label>
+  //           <input
+  //             type="date"
+  //             id="oldCardEndDate"
+  //             ref={refs.oldCardEndDate}
+  //             value={oldCardEndDate}
+  //             onChange={(e) => {
+  //               const value = e.target.value;
 
-                setOldCardEndDate(value);
+  //               setOldCardEndDate(value);
 
-                registerInfoBHYT["listInsuredPerson"][index].oldCardEndDate =
-                  formatDate(value);
-              }}
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Chọn ngày sinh"
-              required
-            />
-          </div>
-        </div>
+  //               registerInfoBHYT["listInsuredPerson"][index].oldCardEndDate =
+  //                 formatDate(value);
+  //             }}
+  //             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+  //             placeholder="Chọn ngày sinh"
+  //             required
+  //           />
+  //         </div>
+  //       </div>
 
-        {errors.boxOldCard && (
-          <div className="mt-2 text-red-500">{errors.boxOldCard}</div>
-        )}
-      </div>
-    );
-  };
+  //       {errors.boxOldCard && (
+  //         <div className="mt-2 text-red-500">{errors.boxOldCard}</div>
+  //       )}
+  //     </div>
+  //   );
+  // };
 
   const renderBoxNewCard = () => {
     return (
@@ -1265,40 +1270,40 @@ const UserBeneficiaryBHYTPage = (props: Props) => {
     );
   };
 
-  const renderDistrict = () => {
-    return (
-      <div>
-        <label className="block text-sm font-normal pb-2 text-gray-900">
-          Quận huyện khám chữa bệnh
-          <samp className="text-red-600"> *</samp>
-        </label>
-        <Select
-          size="large"
-          className="w-[100%]"
-          dropdownStyle={{ maxWidth: "300px" }}
-          showSearch
-          ref={refs.medicalDistrictId}
-          virtual={false}
-          placeholder="Chọn quận huyện"
-          value={medicalDistrictId}
-          dropdownMatchSelectWidth={false}
-          onChange={(value) => {
-            setMedicalDistrictId(value);
+  // const renderDistrict = () => {
+  //   return (
+  //     <div>
+  //       <label className="block text-sm font-normal pb-2 text-gray-900">
+  //         Quận huyện khám chữa bệnh
+  //         <samp className="text-red-600"> *</samp>
+  //       </label>
+  //       <Select
+  //         size="large"
+  //         className="w-[100%]"
+  //         dropdownStyle={{ maxWidth: "300px" }}
+  //         showSearch
+  //         ref={refs.medicalDistrictId}
+  //         virtual={false}
+  //         placeholder="Chọn quận huyện"
+  //         value={medicalDistrictId}
+  //         dropdownMatchSelectWidth={false}
+  //         onChange={(value) => {
+  //           setMedicalDistrictId(value);
 
-            setHospitalId(0);
+  //           setHospitalId(0);
 
-            registerInfoBHYT["listInsuredPerson"][index].medicalDistrictId =
-              value;
-          }}
-          key={medicalProvinceId}
-          filterOption={(input, option) =>
-            (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-          }
-          options={convertListToSelect(districts, "Chọn quận huyện")}
-        />
-      </div>
-    );
-  };
+  //           registerInfoBHYT["listInsuredPerson"][index].medicalDistrictId =
+  //             value;
+  //         }}
+  //         key={medicalProvinceId}
+  //         filterOption={(input, option) =>
+  //           (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+  //         }
+  //         options={convertListToSelect(districts, "Chọn quận huyện")}
+  //       />
+  //     </div>
+  //   );
+  // };
 
   const renderHispital = () => {
     return (
@@ -1374,35 +1379,35 @@ const UserBeneficiaryBHYTPage = (props: Props) => {
     );
   };
 
-  const inputProvinceParticipate = () => {
-    return (
-      <div>
-        <label className="block text-sm font-normal text-gray-900 pb-2">
-          Tỉnh / Thành phố nơi tham gia BHYT{" "}
-          <samp className="text-red-600">*</samp>
-        </label>
-        <Select
-          size="large"
-          className="w-[100%]"
-          showSearch
-          placeholder="Chọn thành phố"
-          ref={refs.insuranceProvinceId}
-          dropdownMatchSelectWidth={false}
-          onChange={(value) => {
-            setSelectedProvinceParticipate(value);
+  // const inputProvinceParticipate = () => {
+  //   return (
+  //     <div>
+  //       <label className="block text-sm font-normal text-gray-900 pb-2">
+  //         Tỉnh / Thành phố nơi tham gia BHYT{" "}
+  //         <samp className="text-red-600">*</samp>
+  //       </label>
+  //       <Select
+  //         size="large"
+  //         className="w-[100%]"
+  //         showSearch
+  //         placeholder="Chọn thành phố"
+  //         ref={refs.insuranceProvinceId}
+  //         dropdownMatchSelectWidth={false}
+  //         onChange={(value) => {
+  //           setSelectedProvinceParticipate(value);
 
-            registerInfoBHYT["listInsuredPerson"][index].insuranceProvinceId =
-              value;
-          }}
-          value={selectedProvinceParticipate}
-          filterOption={(input, option) =>
-            (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-          }
-          options={convertListToSelect(provinces, "Chọn tỉnh thành phố")}
-        />
-      </div>
-    );
-  };
+  //           registerInfoBHYT["listInsuredPerson"][index].insuranceProvinceId =
+  //             value;
+  //         }}
+  //         value={selectedProvinceParticipate}
+  //         filterOption={(input, option) =>
+  //           (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+  //         }
+  //         options={convertListToSelect(provinces, "Chọn tỉnh thành phố")}
+  //       />
+  //     </div>
+  //   );
+  // };
 
   const inputKSProvinceParticipate = () => {
     return (

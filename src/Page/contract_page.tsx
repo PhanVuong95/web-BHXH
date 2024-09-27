@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import HeaderBase from "../Components/headerBase";
 
-const ContractPage: React.FunctionComponent = (props) => {
+const ContractPage: React.FunctionComponent = () => {
   const [imageSrcs, setImageSrcs] = useState<string[]>([]);
 
   useEffect(() => {

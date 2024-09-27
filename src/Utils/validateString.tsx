@@ -38,7 +38,7 @@ export const formatDateToUpdateSQL = (date: Date) => {
   }
 };
 
-export const removeUndefinedField = (params: object) => {
+export const removeUndefinedField = (params: Record<string, any>) => {
   Object.keys(params).forEach((key) => {
     if (typeof params[key] === "undefined") {
       delete params[key];
@@ -47,7 +47,9 @@ export const removeUndefinedField = (params: object) => {
   return params;
 };
 
-export const convertPayloadToQueryString = (payload: object = {}) => {
+export const convertPayloadToQueryString = (
+  payload: Record<string, any> = {}
+) => {
   return Object.keys(payload)
     .map((key) => {
       return encodeURIComponent(key) + "=" + encodeURIComponent(payload[key]);
@@ -55,14 +57,16 @@ export const convertPayloadToQueryString = (payload: object = {}) => {
     .join("&");
 };
 
-export const formatTime = (dates: string) => {
+export const formatTime = (dates: string): string => {
   try {
-    var date = dates.split("T")[0]?.split("-");
+    const dateParts = dates.split("T")[0]?.split("-");
+    const timeParts = dates.split("T")[1]?.split(":");
 
-    var time = dates.split("T")[1]?.split(":");
-    if (date) {
-      return `${time[0]}:${time[1]} - ${date[2]}/${date[1]}/${date[0]}`;
+    if (dateParts && timeParts) {
+      return `${timeParts[0]}:${timeParts[1]} - ${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
     }
+
+    return "";
   } catch (error) {
     console.log(error);
     return "";
@@ -71,11 +75,11 @@ export const formatTime = (dates: string) => {
 
 export const formatTime1 = (dates: string) => {
   try {
-    var date = dates.split("T")[0]?.split("-");
+    const dateParts = dates.split("T")[0]?.split("-");
+    const timeParts = dates.split("T")[1]?.split(":");
 
-    var time = dates.split("T")[1]?.split(":");
-    if (date) {
-      return ` ${date[2]}/${date[1]}/${date[0]}`;
+    if (dateParts && timeParts) {
+      return ` ${dateParts[2]}/${dateParts[1]}/${dateParts[0]} ${timeParts[0]}:${timeParts[1]}`;
     }
   } catch (error) {
     console.log(error);
@@ -131,7 +135,7 @@ export const isValidAddress = (data: string) => {
   return !addressCheck.test(data);
 };
 
-export const formatPhoneNumber = (phoneNumber) => {
+export const formatPhoneNumber = (phoneNumber: any) => {
   try {
     return phoneNumber.replace(/(\d{4})(\d{3})(\d{3})/, "$1.$2.$3");
   } catch (error) {
@@ -165,9 +169,9 @@ export const isValidCitizenId = (data: string) => {
   return /^\d+$/.test(data) && citizenIdCheck.test(data);
 };
 
-export const compareTwoDateString = (dateString1, dateString2) => {
+export const compareTwoDateString = (dateString1: any, dateString2: any) => {
   // Hàm chuyển đổi chuỗi ngày theo định dạng MM/DD/YYYY sang YYYY-MM-DD
-  function convertDateFormat(dateString) {
+  function convertDateFormat(dateString: any) {
     const parts = dateString.split("/");
     return parts[2] + "-" + parts[1] + "-" + parts[0];
   }
@@ -192,29 +196,29 @@ export const compareTwoDateString = (dateString1, dateString2) => {
   }
 };
 
-export const isValidString = (data) => {
-  if (typeof data !== "string") return "";
-  return data.trim();
-};
-
 interface typeSelect {
   value: number;
   label: string;
 }
 
-export const convertListToSelect = (data, placeholer) => {
+export const isValidString = (data: any): string => {
+  if (typeof data !== "string") return "";
+  return data.trim();
+};
+
+export const convertListToSelect = (data: any, placeholer: any) => {
   let list: typeSelect[] = [];
   list.push({ value: 0, label: placeholer });
-  data.forEach((element) => {
+  data.forEach((element: any) => {
     list.push({ value: element.id, label: element.name });
   });
   return list;
 };
 
-export const convertListToSelectVungLuong = (data, placeholer) => {
+export const convertListToSelectVungLuong = (data: any, placeholer: any) => {
   let list: typeSelect[] = [];
   list.push({ value: 0, label: placeholer });
-  data.forEach((element) => {
+  data.forEach((element: any) => {
     list.push({ value: element.id, label: element.vungLttTen });
   });
   return list;
@@ -248,17 +252,25 @@ export const formatDateByTime = (date: Date) => {
   }
 };
 
-export const convertListToSelectObjectTypeGroupList = (data) => {
-  let list: typeSelect[] = [];
-  data.forEach((element) => {
+interface TypeSelect {
+  value: number;
+  label: string;
+}
+export const convertListToSelectObjectTypeGroupList = (
+  data: any[]
+): TypeSelect[] => {
+  let list: TypeSelect[] = [];
+  data.forEach((element: any) => {
     list.push({ value: element.id, label: element.nhomLoaiDoiTuongTen });
   });
   return list;
 };
 
-export const convertListToSelectObjectTypeGroup = (data) => {
-  let list: typeSelect[] = [];
-  data.forEach((element) => {
+export const convertListToSelectObjectTypeGroup = (
+  data: any[]
+): TypeSelect[] => {
+  let list: TypeSelect[] = [];
+  data.forEach((element: any) => {
     list.push({ value: element.id, label: element.doiTuongTen });
   });
   return list;

@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import HeaderBase from "../Components/headerBase";
 
-const HistoryPage: React.FunctionComponent = (props) => {
+const HistoryPage: React.FunctionComponent = () => {
   const navigate = useNavigate();
   return (
     <>
